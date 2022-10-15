@@ -1,0 +1,85 @@
+; Adapted from https://github.com/ocaml/odoc/blob/master/test/generators/link.dune.inc
+
+(rule
+ (target markup.cmti)
+ (action
+  (run ocamlc -c -bin-annot -o %{target} %{dep:../../content/markup.mli})))
+
+(rule
+ (target markup.odoc)
+ (action
+  (run odoc compile -o %{target} %{dep:markup.cmti})))
+
+(rule
+ (target markup.odocl)
+ (action
+  (run odoc link -o %{target} %{dep:markup.odoc})))
+
+(subdir
+ html
+ (rule
+  (targets Markup.html.gen Markup-X.html.gen Markup-Y.html.gen)
+  (action
+   (run
+    odoc
+    html-generate
+    --indent
+    --flat
+    --support-uri=../../res/odoc-theme
+    --theme-uri=../../res/odoc-theme
+    --extra-suffix
+    gen
+    -o
+    .
+    %{dep:../markup.odocl})))
+ ; to reStructuredText
+ (rule
+  (target Markup.rst.gen)
+  (action
+   (run pandoc -f html -t rst -o %{target} %{dep:Markup.html.gen})))
+ (rule
+  (target Markup-X.rst.gen)
+  (action
+   (run pandoc -f html -t rst -o %{target} %{dep:Markup-X.html.gen})))
+ (rule
+  (target Markup-Y.rst.gen)
+  (action
+   (run pandoc -f html -t rst -o %{target} %{dep:Markup-Y.html.gen})))
+ ; to HTML
+ (rule
+  (target Markup.html.gen2)
+  (action
+   (run pandoc -f rst -t html -o %{target} %{dep:Markup.rst.gen})))
+ (rule
+  (target Markup-X.html.gen2)
+  (action
+   (run pandoc -f rst -t html -o %{target} %{dep:Markup-X.rst.gen})))
+ (rule
+  (target Markup-Y.html.gen2)
+  (action
+   (run pandoc -f rst -t html -o %{target} %{dep:Markup-Y.rst.gen})))
+ ; diff/promote
+ (rule
+  (alias runtest)
+  (action
+   (diff Markup.html Markup.html.gen2)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Markup-X.html Markup-X.html.gen2)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Markup-Y.html Markup-Y.html.gen2))))
+
+(subdir
+ html
+ (rule
+  (action
+   (with-outputs-to
+    markup.targets.gen
+    (run odoc html-targets -o . %{dep:../markup.odocl} --flat))))
+ (rule
+  (alias runtest)
+  (action
+   (diff markup.targets markup.targets.gen))))

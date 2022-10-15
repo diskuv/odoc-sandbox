@@ -56,14 +56,16 @@
             <div class="card">
                 <h5 class="card-header">Conclusion</h5>
                 <div class="card-body">
-                    <p>Using pandoc to produce Markdown results in very little loss of information.
+                    <p>Using pandoc to produce Markdown results in little loss of information.
                         <strong>pandoc</strong> is a good temporary solution until
-                        <a href="https://github.com/ocaml/odoc/issues/709">PR#709</a> is complete
+                        <a href="https://github.com/ocaml/odoc/issues/709">Issue #709</a> is complete.
                     </p>
                     <ol>
                         <li>There are very minor spacing differences. Which is natural because you can't
                             specify spacing in Markdown.
                         </li>
+                        <li>Unicode (beyond ASCII) does not render correctly</li>
+                        <li>Raw HTML is lost completely</li>
                         <li>At the bottom of the Results the module references are rendered incorrectly:
                             <pre>
     module X`` `` :sig...end``
