@@ -81,7 +81,7 @@ $ conda update -n base -c defaults conda
 $ if ! conda list -q -n odoc-sandbox &>/dev/null; then
     conda create --yes -n odoc-sandbox python=3.8
   fi
-$ conda install -c conda-forge --yes -n odoc-sandbox 'python>=3.8' sphinx pandoc
+$ conda install -c conda-forge --yes -n odoc-sandbox 'python>=3.8' sphinx pandoc mdformat
 ```
 
 *The above command can be run repeatedly; you can use it for upgrading Python dependencies.*
@@ -131,5 +131,5 @@ PS> &conda list -q -n odoc-sandbox | Out-Null
       &conda create -y -n odoc-sandbox -c conda-forge 'python=3.8'
     }
 
-PS> &conda install -c conda-forge --yes -n odoc-sandbox 'python>=3.8' sphinx pandoc
+PS> &conda install -c conda-forge --yes -n odoc-sandbox 'python>=3.8' sphinx pandoc mdformat
 ```
