@@ -1,0 +1,85 @@
+; Adapted from https://github.com/ocaml/odoc/blob/master/test/generators/link.dune.inc
+
+(rule
+ (target markup.cmti)
+ (action
+  (run ocamlc -c -bin-annot -o %{target} %{dep:../../content/markup.mli})))
+
+(rule
+ (target markup.odoc)
+ (action
+  (run odoc compile -o %{target} %{dep:markup.cmti})))
+
+(rule
+ (target markup.odocl)
+ (action
+  (run odoc link -o %{target} %{dep:markup.odoc})))
+
+(subdir
+ html
+ (rule
+  (targets Markup.html.gen Markup-X.html.gen Markup-Y.html.gen)
+  (action
+   (run
+    odoc
+    html-generate
+    --indent
+    --flat
+    --support-uri=../../res/odoc-theme
+    --theme-uri=../../res/odoc-theme
+    --extra-suffix
+    gen
+    -o
+    .
+    %{dep:../markup.odocl})))
+ ; to Markdown
+ (rule
+  (target Markup.md.gen)
+  (action
+   (run pandoc -f html -t gfm -o %{target} %{dep:Markup.html.gen})))
+ (rule
+  (target Markup-X.md.gen)
+  (action
+   (run pandoc -f html -t gfm -o %{target} %{dep:Markup-X.html.gen})))
+ (rule
+  (target Markup-Y.md.gen)
+  (action
+   (run pandoc -f html -t gfm -o %{target} %{dep:Markup-Y.html.gen})))
+ ; to HTML
+ (rule
+  (target Markup.html.gen2)
+  (action
+   (run pandoc -f gfm -t html -o %{target} %{dep:Markup.md.gen})))
+ (rule
+  (target Markup-X.html.gen2)
+  (action
+   (run pandoc -f gfm -t html -o %{target} %{dep:Markup-X.md.gen})))
+ (rule
+  (target Markup-Y.html.gen2)
+  (action
+   (run pandoc -f gfm -t html -o %{target} %{dep:Markup-Y.md.gen})))
+ ; diff/promote
+ (rule
+  (alias runtest)
+  (action
+   (diff Markup.html Markup.html.gen2)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Markup-X.html Markup-X.html.gen2)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Markup-Y.html Markup-Y.html.gen2))))
+
+(subdir
+ html
+ (rule
+  (action
+   (with-outputs-to
+    markup.targets.gen
+    (run odoc html-targets -o . %{dep:../markup.odocl} --flat))))
+ (rule
+  (alias runtest)
+  (action
+   (diff markup.targets markup.targets.gen))))

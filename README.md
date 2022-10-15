@@ -2,9 +2,11 @@
 
 This project is a home ("sandbox") for experiments on [odoc](https://github.com/ocaml/odoc).
 
+The experiment results are rendered at [https://diskuv.github.io/odoc-sandbox/](https://diskuv.github.io/odoc-sandbox/).
+
 ## Usage
 
-To explore the sandbox you will need to:
+To modify the sandbox you will need to:
 
 1. Check out the source code locally on your computer
 2. Install the system requirements for your operating system:
@@ -19,12 +21,15 @@ To explore the sandbox you will need to:
 
 Then you can use:
 
-| Command                                                                | What                                                |
-| ---------------------------------------------------------------------- | --------------------------------------------------- |
-| `conda run -n odoc-sandbox make`                                       | setup an Opam switch and run the experiments        |
-| `conda run -n odoc-sandbox make ide`                                   | setup an Opam switch with OCaml LSP and ocamlformat |
-| `conda run -n odoc-sandbox make server`                                | see the resulting HTML in a web browser             |
-| `conda run -n odoc-sandbox dune build @runtest --auto-promote --watch` | autorun the experiments                             |
+| Command                                                                              | What                                                |
+| ------------------------------------------------------------------------------------ | --------------------------------------------------- |
+| `conda run -n odoc-sandbox make`                                                     | setup an Opam switch and run the experiments        |
+| `conda run -n odoc-sandbox make ide`                                                 | setup an Opam switch with OCaml LSP and ocamlformat |
+| `conda run -n odoc-sandbox --live-stream make server`                                | see the resulting HTML at http://localhost:8000     |
+| `conda run -n odoc-sandbox --live-stream dune build @runtest --auto-promote --watch` | autorun the experiments                             |
+
+You will find it useful to do the `... make server` and the `... dune build ... --watch` commands in parallel; you can tweak
+an experiment and see the result by refreshing the page.
 
 ## Directory Structure
 

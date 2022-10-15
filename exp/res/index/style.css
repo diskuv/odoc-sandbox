@@ -1,9 +1,68 @@
 body {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    background: #f5f5f5;
+    color: #202020;
+    grid-template-columns: 1rem auto 1rem;
     grid-template-areas: "... content ...";
 }
 
 .content {
+    padding-top: 1em;
     grid-area: content;
+}
+
+/* .card-* is from https://github.com/kbrsh/wing/blob/gh-pages/dist/wing.css which is older than our
+   wing.min.css but is better looking */
+
+.card-header {
+    padding: 2rem 3rem 1rem;
+}
+
+.card-body {
+    padding: 0 3rem 2rem 3rem;
+    min-height: 100px;
+}
+
+.card-footer {
+    display: flex;
+    align-items: stretch;
+    border-top: 1px solid #dbdbdb;
+    flex: 1;
+    /* added */
+    padding-block-start: 1em;
+    padding-block-end: 1em;
+}
+
+.card-footer .card-footer-item {
+    display: flex;
+    flex-basis: 0;
+    flex-grow: 1;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 1rem;
+}
+
+.card-footer-item:not(:first-child) {
+    border-left: 1px solid #dbdbdb;
+}
+
+/* Responsive layout */
+
+@media screen and (min-width: 601px) {
+    body {
+        grid-template-columns: 1fr auto 1fr;
+        grid-template-areas: "... content ...";
+    }
+
+    .content {
+        max-width: 400px;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .content {
+        max-width: 800px;
+    }
 }

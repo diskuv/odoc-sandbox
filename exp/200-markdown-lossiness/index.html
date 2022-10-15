@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>200-markdown-lossiness</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" type='text/css' media='screen' href="../res/index/wing.min.css" />
+    <link rel="stylesheet" type='text/css' media='screen' href="../res/index/style.css" />
+</head>
+
+<body>
+    <div class="content">
+        <div class="nav">
+            <h5 class="nav-logo">odoc sandbox</h5>
+            <a class="nav-item" href="../index.html">Index of Experiments</a>
+        </div>
+        <div class="cards">
+            <div class="card">
+                <h5 class="card-header">Design</h5>
+                <div class="card-body">
+                    <p>We'll convert odoc HTML into <a href="https://github.github.com/gfm/">GitHub Flavored
+                            Markdown</a>
+                        (gfm), and then from gfm Markdown back to HTML.</p>
+
+                    <p>Basically: <code>odoc.html | pandoc.gfm | pandoc.html</code></p>
+
+                    <p>Typically we may just stop at Markdown since Markdown (together with YAML frontmatter)
+                        is the conventional content format for static site generators.
+                        <a href="https://github.github.com/gfm/">GitHub Flavored Markdown</a> is a common Markdown
+                        format,
+                        in use in GitHub (obviously)
+                        and in the <a href="https://www.gatsbyjs.com/plugins/gatsby-transformer-remark/">Gatsby</a>
+                        static site generator.
+                    </p>
+
+                    <p>Converting again to HTML lets us visually inspect <strong>how much information has
+                            disappeared</strong>
+                        in the conversion to Markdown <strong>using pandoc</strong>.</p>
+                </div>
+                <div class="card-footer center text-center">
+                    <p>With native odoc support for Markdown (see <a
+                            href="https://github.com/ocaml/odoc/issues/709">PR#709</a>)
+                        there should be no lossiness.</p>
+                </div>
+            </div>
+            <div class="card">
+                <h5 class="card-header">Results</h5>
+                <dl class="card-body">
+                    <dt><a href="html/Markup.html">markup.mli</a></dt>
+                    <dd>test the Experiment Design rendering of comment markup in a .mli file. Compare to the <a
+                            href="../100-plain/html/Markup.html">original (100-plain) rendering</a></dd>
+                </dl>
+            </div>
+            <div class="card">
+                <h5 class="card-header">Conclusion</h5>
+                <div class="card-body">
+                    <p>Using pandoc to produce Markdown results in very little loss of information.
+                        <strong>pandoc</strong> is a good temporary solution until
+                        <a href="https://github.com/ocaml/odoc/issues/709">PR#709</a> is complete
+                    </p>
+                    <ol>
+                        <li>There are very minor spacing differences. Which is natural because you can't
+                            specify spacing in Markdown.
+                        </li>
+                        <li>At the bottom of the Results the module references are rendered incorrectly:
+                            <pre>
+    module X`` `` :sig...end``
+    module Y`` `` :sig...end``
+                            </pre>
+
+                            The original shows what it should have been:
+
+                            <pre>
+    module X : sig ... end
+    module Y : sig ... end                                
+                            </pre>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
