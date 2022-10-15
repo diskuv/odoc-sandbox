@@ -45,19 +45,19 @@
   (target Markup-Y.md.gen)
   (action
    (run pandoc -f html -t gfm -o %{target} %{dep:Markup-Y.html.gen})))
- ; to HTML
+ ; to standalone (-s) HTML (-t html) with CSS (-c)
  (rule
   (target Markup.html.gen2)
   (action
-   (run pandoc -f gfm -t html -o %{target} %{dep:Markup.md.gen})))
+   (run pandoc -f gfm -t html -s -c ../../res/odoc-theme/odoc.css -o %{target} %{dep:Markup.md.gen})))
  (rule
   (target Markup-X.html.gen2)
   (action
-   (run pandoc -f gfm -t html -o %{target} %{dep:Markup-X.md.gen})))
+   (run pandoc -f gfm -t html -s -c ../../res/odoc-theme/odoc.css -o %{target} %{dep:Markup-X.md.gen})))
  (rule
   (target Markup-Y.html.gen2)
   (action
-   (run pandoc -f gfm -t html -o %{target} %{dep:Markup-Y.md.gen})))
+   (run pandoc -f gfm -t html -s -c ../../res/odoc-theme/odoc.css -o %{target} %{dep:Markup-Y.md.gen})))
  ; diff/promote
  (rule
   (alias runtest)
