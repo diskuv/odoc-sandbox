@@ -1,0 +1,229 @@
+<div class="container odoc-preamble">
+<p><strong>Module <code>Markup</code></strong></p>
+<p>Here, we test the rendering of comment markup.</p>
+</div>
+<ul>
+<li><a href="#sections">Sections</a>
+<ul>
+<li><a href="#subsection-headings">Subsection headings</a>
+<ul>
+<li><a href="#sub-subsection-headings">Sub-subsection headings</a></li>
+<li><a href="#anchors">Anchors</a>
+<ul>
+<li><a href="#paragraph">Paragraph</a>
+<ul>
+<li><a href="#subparagraph">Subparagraph</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="#styling">Styling</a></li>
+<li><a href="#links-and-references">Links and references</a></li>
+<li><a href="#preformatted-text">Preformatted text</a></li>
+<li><a href="#lists">Lists</a></li>
+<li><a href="#unicode">Unicode</a></li>
+<li><a href="#raw-html">Raw HTML</a></li>
+<li><a href="#math">Math</a>
+<ul>
+<li><a href="#\pi-i-\xi-x">\pi i \xi x</a></li>
+</ul></li>
+<li><a href="#modules">Modules</a></li>
+<li><a href="#tags">Tags</a></li>
+</ul>
+<div class="container odoc-content">
+<p><strong><a href="#sections">#sections</a>Sections</strong></p>
+<p>Let's get these done first, because sections will be used to break up
+the rest of this test.</p>
+<p>Besides the section heading above, there are also</p>
+<p><strong><a
+href="#subsection-headings">#subsection-headings</a>Subsection
+headings</strong></p>
+<p>and</p>
+<p><strong><a
+href="#sub-subsection-headings">#sub-subsection-headings</a>Sub-subsection
+headings</strong></p>
+<p>but odoc has banned deeper headings. There are also title headings,
+but they are only allowed in mld files.</p>
+<p><strong><a href="#anchors">#anchors</a>Anchors</strong></p>
+<p>Sections can have attached <a href="#anchors">Anchors</a>, and it is
+possible to <a href="#anchors">link</a> to them. Links to section
+headers should not be set in source code style.</p>
+<p><strong><a href="#paragraph">#paragraph</a>Paragraph</strong></p>
+<p>Individual paragraphs can have a heading.</p>
+<p><strong><a href="#subparagraph">#subparagraph</a>
+Subparagraph</strong></p>
+<p>Parts of a longer paragraph that can be considered alone can also
+have headings.</p>
+<p><strong><a href="#styling">#styling</a>Styling</strong></p>
+<p>This paragraph has some styled elements: <strong>bold</strong> and
+<em>italic</em> , <strong>bold italic</strong>, <em>emphasis</em>,
+<em>emphasis within emphasis</em>, <strong>bold italic</strong>,
+super<sup>script</sup>, sub<sub>script</sub> . The line spacing should
+be enough for superscripts and subscripts not to look odd.</p>
+<p>Note: <em>In italics emphasis is rendered as normal text while
+emphasis in emphasis is rendered in italics.</em> <em>It also work the
+same in</em><a href="#">links in italics with emphasis in
+emphasis.</a></p>
+<p><code>code</code> is a different kind of markup that doesn't allow
+nested markup.</p>
+<p>It's possible for two markup elements to appear <strong>next</strong>
+<em>to</em> each other and have a space, and appear
+<strong>next</strong><em>to</em> each other with no space. It doesn't
+matter <strong>how</strong> <em>much</em> space it was in the source: in
+this sentence, it was two space characters. And in this one, there is
+<strong>a</strong> <em>newline</em>.</p>
+<p>This is also true between <em>non-</em><code>code</code> markup
+<em>and</em> <code>code</code>.</p>
+<p>Code can appear <strong>inside ``other`` markup</strong>. Its display
+shouldn't be affected.</p>
+<p><strong><a
+href="#links-and-references">#links-and-references</a>Links and
+references</strong></p>
+<p>This is a <a href="#">link</a>. It sends you to the top of this page.
+Links can have markup inside them: <a href="#">bold</a> , <a
+href="#">italics</a>, <a href="#">emphasis</a> , <a
+href="#">superscript</a>, <a href="#">subscript</a>, and
+<code>`code</code> &lt;#&gt;<span class="title-ref">__. Links can also
+be nested `inside &lt;#&gt;</span>__ markup. Links cannot be nested
+inside each other. This link has no replacement text: <a href="#">#</a>
+. The text is filled in by odoc. This is a shorthand link: <a
+href="#">#</a>. The text is also filled in by odoc in this case.</p>
+<p>This is a reference to <code>`foo</code> &lt;#val-foo&gt;<span
+class="title-ref">__. References can have replacement text: `the value
+foo &lt;#val-foo&gt;</span>__. Except for the special lookup support,
+references are pretty much just like links. The replacement text can
+have nested styles: <a href="#val-foo">bold</a>, <a
+href="#val-foo">italic</a>, <a href="#val-foo">emphasis</a>, <a
+href="#val-foo">superscript</a>, <a href="#val-foo">subscript</a>, and
+<code>`code</code> &lt;#val-foo&gt;<span class="title-ref">__. It's also
+possible to surround a reference in a style: </span><code>foo</code>
+&lt;#val-foo&gt;`__ . References can't be nested inside references, and
+links and references can't be nested inside each other.</p>
+<p><strong><a
+href="#preformatted-text">#preformatted-text</a>Preformatted
+text</strong></p>
+<p>This is a code block:</p>
+<p>:</p>
+<pre><code>let foo = ()
+(** There are some nested comments in here, but an unpaired comment
+    terminator would terminate the whole doc surrounding comment. It&#39;s
+    best to keep code blocks no wider than 72 characters. *)
+
+let bar =
+  ignore foo</code></pre>
+<p>There are also verbatim blocks:</p>
+<pre><code>The main difference is these don&#39;t get syntax highlighting.</code></pre>
+<p><strong><a href="#lists">#lists</a>Lists</strong></p>
+<ul>
+<li>This is a</li>
+<li>shorthand bulleted list,</li>
+<li>and the paragraphs in each list item support <em>styling</em>.</li>
+</ul>
+<ol>
+<li>This is a</li>
+<li>shorthand numbered list.</li>
+</ol>
+<ul>
+<li>Shorthand list items can span multiple lines, however trying to put
+two paragraphs into a shorthand list item using a double line break</li>
+</ul>
+<p>just creates a paragraph outside the list.</p>
+<ul>
+<li><p>Similarly, inserting a blank line between two list items</p></li>
+<li><p>creates two separate lists.</p></li>
+<li><p>To get around this limitation, one</p>
+<p>can use explicitly-delimited lists.</p></li>
+<li><p>This one is bulleted,</p></li>
+</ul>
+<ol>
+<li>but there is also the numbered variant.</li>
+</ol>
+<ul>
+<li><ul>
+<li>lists</li>
+<li>can be nested</li>
+<li>and can include references</li>
+<li><code>`foo</code> &lt;#val-foo&gt;`__</li>
+</ul></li>
+</ul>
+<p><strong><a href="#unicode">#unicode</a>Unicode</strong></p>
+<p>The parser supports any ASCII-compatible encoding, in particuλar
+UTF-8.</p>
+<p><strong><a href="#raw-html">#raw-html</a>Raw HTML</strong></p>
+<p>Raw HTML can be as inline elements into sentences.</p>
+<blockquote>
+<p>If the raw HTML is the only thing in a paragraph, it is treated as a
+block element, and won't be wrapped in paragraph tags by the HTML
+generator.</p>
+</blockquote>
+<p><strong><a href="#math">#math</a>Math</strong></p>
+<p>Math elements can be inline: <code>m \int_{-\infty</code>^\infty</p>
+<p>}</p>
+<p>, or blocks:</p>
+<p><code>math % \f is defined as #1f(#2) using the macro \newcommand{\f</code><code>2</code><code>#1f(#2)</code>
+\f\relax<code>x</code> = \int_</p>
+<p>\infty</p>
+<p>}</p>
+<p>^\infty \f\hat\xi\,e^</p>
+<p><strong><a href="#\pi-i-\xi-x">#\pi-i-\xi-x</a>\pi i \xi
+x</strong></p>
+<p>\,d\xi</p>
+<p>}</p>
+<p><strong><a href="#modules">#modules</a>Modules</strong></p>
+<ul>
+<li><code>`X</code> &lt;Markup-X.html&gt;`__</li>
+<li><code>`X</code> &lt;Markup-X.html&gt;`__</li>
+<li><code>`Y</code> &lt;Markup-Y.html&gt;`__</li>
+</ul>
+<p><strong><a href="#tags">#tags</a>Tags</strong></p>
+<p>Each comment can end with zero or more tags. Here are some
+examples:</p>
+<ul>
+<li><p>author antron</p></li>
+<li><p>deprecated</p>
+<p>a <em>long</em> time ago</p></li>
+<li><p>parameter foo</p>
+<p>unused</p></li>
+<li><p>raises Failure</p>
+<p>always</p></li>
+<li><p>returns</p>
+<p>never</p></li>
+<li><p>see <a href="#">#</a></p>
+<p>this url</p></li>
+<li><p>see <code>foo.ml</code></p>
+<p>this file</p></li>
+<li><p>see Foo</p>
+<p>this document</p></li>
+<li><p>since 0</p></li>
+<li><p>before 1.0</p>
+<p>it was in b<sup>e</sup>t<sub>a</sub></p></li>
+<li><p>version -1</p></li>
+</ul>
+<div class="container odoc-spec">
+<div id="val-foo" class="container anchored">
+<p><a href="#val-foo">#val-foo</a>
+<code>val</code><code>foo : unit</code></p>
+</div>
+<div class="container spec-doc">
+<p>Comments in structure items <strong>support</strong> <em>markup</em>,
+t <sup>o</sup><sub>o</sub>.</p>
+</div>
+</div>
+<p>Some modules to support references.</p>
+<div class="container odoc-spec">
+<div id="module-X" class="container anchored">
+<p><a href="#module-X">#module-X</a>
+<code></code><code>module</code><code></code><code>`X</code>
+&lt;Markup-X.html&gt;<span
+class="title-ref">__</span><code>`\</code><code>\</code>:<code>\</code>sig<code>\</code>...<code>\</code>end<code>\</code><code>\</code>``</p>
+</div>
+</div>
+<div class="container odoc-spec">
+<div id="module-Y" class="container anchored">
+<p><a href="#module-Y">#module-Y</a>
+<code></code><code>module</code><code></code><code>`Y</code>
+&lt;Markup-Y.html&gt;<span
+class="title-ref">__</span><code>`\</code><code>\</code>:<code>\</code>sig<code>\</code>...<code>\</code>end<code>\</code><code>\</code>``</p>
+</div>
+</div>
+</div>
