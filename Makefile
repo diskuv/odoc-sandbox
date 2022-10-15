@@ -79,7 +79,7 @@ exp/res/odoc-theme/highlight.pack.js: $(OPAMPKGS_ARTIFACTS)
 exp/res/odoc-theme/odoc.css: $(OPAMPKGS_ARTIFACTS)
 	export OPAMYES=1 OPAMSWITCH='$(OPAMSWITCH)' && \
 	ODOC_SHARE=$$(opam var odoc:share) && \
-	opam exec -- diskuvbox copy-file "$$ODOC_SHARE/odoc-theme/default/highlight.pack.js" $@
+	opam exec -- diskuvbox copy-file "$$ODOC_SHARE/odoc-theme/default/odoc.css" $@
 
 # ------------------------ Development Tasks ------------------------
 
