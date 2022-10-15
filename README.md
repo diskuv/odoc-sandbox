@@ -79,9 +79,10 @@ FOURTH, run the following:
 ```console
 $ conda update -n base -c defaults conda
 $ if ! conda list -q -n odoc-sandbox &>/dev/null; then
-    conda create --yes -n odoc-sandbox python=3.8
+    conda env create -f environment.yml
+  else
+    conda env update -f environment.yml
   fi
-$ conda install -c conda-forge --yes -n odoc-sandbox 'python>=3.8' sphinx pandoc mdformat
 ```
 
 *The above command can be run repeatedly; you can use it for upgrading Python dependencies.*
@@ -128,8 +129,8 @@ SECOND, in **PowerShell** do the following:
 PS> &conda update -n base -c defaults conda
 PS> &conda list -q -n odoc-sandbox | Out-Null
     if ($LASTEXITCODE) {
-      &conda create -y -n odoc-sandbox -c conda-forge 'python=3.8'
+      &conda env create -f environment.yml
+    } else {
+      &conda env update -f environment.yml
     }
-
-PS> &conda install -c conda-forge --yes -n odoc-sandbox 'python>=3.8' sphinx pandoc mdformat
 ```
