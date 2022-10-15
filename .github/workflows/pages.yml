@@ -1,0 +1,69 @@
+name: Publish GitHub Pages
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  build:
+    permissions:
+      # peaceiris/actions-gh-pages@v3 or ocaml/setup-ocaml/deploy-doc pushes to the gh-pages branch
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Cache conda
+        uses: actions/cache@v2
+        env:
+          # Increase this value to reset cache if environment.yml has not changed
+          CACHE_NUMBER: 0
+        with:
+          path: ~/conda_pkgs_dir
+          key:
+            ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{
+            hashFiles('environment.yml') }}
+
+      - name: Conda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-update-conda: true
+          auto-activate-base: false
+          activate-environment: odoc-sandbox
+          python-version: 3.8
+          environment-file: environment.yml
+          condarc-file: .condarc
+          use-only-tar-bz2: true # IMPORTANT: This needs to be set for caching to work properly!
+
+      - name: Conda info
+        shell: bash -l {0} # for Conda; see https://github.com/marketplace/actions/setup-miniconda
+        run: |
+          conda info
+          conda list
+
+      - name: OCaml 4.12.x
+        uses: ocaml/setup-ocaml@v2
+        with:
+          ocaml-compiler: 4.12.x
+          dune-cache: false # true does not publish pages consistently
+
+      - name: Build docs and tests
+        shell: bash -l {0} # for Conda; see https://github.com/marketplace/actions/setup-miniconda
+        run: make test
+
+      - name: Assemble docs
+        run: |
+          install -d _build/_html
+          rsync -av \
+            --filter '+ */' \
+            --filter '+ *.html' --filter '+ *.css' --filter '+ *.js' \
+            --filter '- *' \
+            exp/ _build/_html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: _build/_html

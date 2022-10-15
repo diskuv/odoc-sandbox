@@ -1,0 +1,102 @@
+; Adapted from https://github.com/ocaml/odoc/blob/master/test/generators/link.dune.inc
+
+(rule
+ (target markup.cmti)
+ (action
+  (run ocamlc -c -bin-annot -o %{target} %{dep:../../content/markup.mli})))
+
+(rule
+ (target markup.odoc)
+ (action
+  (run odoc compile -o %{target} %{dep:markup.cmti})))
+
+(rule
+ (target markup.odocl)
+ (action
+  (run odoc link -o %{target} %{dep:markup.odoc})))
+
+(rule
+ (target page-mld.odoc)
+ (action
+  (run odoc compile -o %{target} %{dep:../../content/mld.mld})))
+
+(rule
+ (target page-mld.odocl)
+ (action
+  (run odoc link -o %{target} %{dep:page-mld.odoc})))
+
+(subdir
+ html
+ (rule
+  (targets Markup.html.gen Markup-X.html.gen Markup-Y.html.gen)
+  (action
+   (run
+    odoc
+    html-generate
+    --indent
+    --flat
+    --support-uri=../../res/odoc-theme
+    --theme-uri=../../res/odoc-theme
+    --extra-suffix
+    gen
+    -o
+    .
+    %{dep:../markup.odocl})))
+ (rule
+  (alias runtest)
+  (action
+   (diff Markup.html Markup.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Markup-X.html Markup-X.html.gen)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Markup-Y.html Markup-Y.html.gen))))
+
+(subdir
+ html
+ (rule
+  (action
+   (with-outputs-to
+    markup.targets.gen
+    (run odoc html-targets -o . %{dep:../markup.odocl} --flat))))
+ (rule
+  (alias runtest)
+  (action
+   (diff markup.targets markup.targets.gen))))
+
+(subdir
+ html
+ (rule
+  (targets mld.html.gen)
+  (action
+   (run
+    odoc
+    html-generate
+    --indent
+    --flat
+    --support-uri=../../res/odoc-theme
+    --theme-uri=../../res/odoc-theme
+    --extra-suffix
+    gen
+    -o
+    .
+    %{dep:../page-mld.odocl})))
+ (rule
+  (alias runtest)
+  (action
+   (diff mld.html mld.html.gen))))
+
+(subdir
+ html
+ (rule
+  (action
+   (with-outputs-to
+    page-mld.targets.gen
+    (run odoc html-targets -o . %{dep:../page-mld.odocl} --flat))))
+ (rule
+  (alias runtest)
+  (action
+   (diff page-mld.targets page-mld.targets.gen))))
