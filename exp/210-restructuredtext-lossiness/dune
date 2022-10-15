@@ -49,15 +49,15 @@
  (rule
   (target Markup.html.gen2)
   (action
-   (run pandoc -f rst -t html -s -c ../../res/odoc-theme/odoc.css -o %{target} %{dep:Markup.rst.gen})))
+   (run pandoc -f rst -t html -s -c ../../res/odoc-theme/odoc.css -c ../../res/odoc-theme/odoc-fixup.css -o %{target} %{dep:Markup.rst.gen})))
  (rule
   (target Markup-X.html.gen2)
   (action
-   (run pandoc -f rst -t html -s -c ../../res/odoc-theme/odoc.css -o %{target} %{dep:Markup-X.rst.gen})))
+   (run pandoc -f rst -t html -s -c ../../res/odoc-theme/odoc.css -c ../../res/odoc-theme/odoc-fixup.css -o %{target} %{dep:Markup-X.rst.gen})))
  (rule
   (target Markup-Y.html.gen2)
   (action
-   (run pandoc -f rst -t html -s -c ../../res/odoc-theme/odoc.css -o %{target} %{dep:Markup-Y.rst.gen})))
+   (run pandoc -f rst -t html -s -c ../../res/odoc-theme/odoc.css -c ../../res/odoc-theme/odoc-fixup.css -o %{target} %{dep:Markup-Y.rst.gen})))
  ; diff/promote
  (rule
   (alias runtest)
