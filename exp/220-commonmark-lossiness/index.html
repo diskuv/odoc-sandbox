@@ -4,7 +4,7 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>200-gfm-lossiness</title>
+    <title>220-commonmark-lossiness</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel="stylesheet" type='text/css' media='screen' href="../res/index/wing.min.css" />
     <link rel="stylesheet" type='text/css' media='screen' href="../res/index/style.css" />
@@ -20,19 +20,20 @@
             <div class="card">
                 <h5 class="card-header">Design</h5>
                 <div class="card-body">
-                    <p>We'll convert odoc HTML into <a href="https://github.github.com/gfm/">GitHub Flavored
+                    <p>We'll convert odoc HTML into <a href="https://commonmark.org/">CommonMark
                             Markdown</a>
-                        (gfm), and then from gfm Markdown back to HTML.</p>
+                        (commonmark), and then from commonmark Markdown back to HTML.</p>
 
-                    <p>Basically: <code>Odoc.html mli |> Pandoc.gfm |> Pandoc.html</code></p>
+                    <p>Basically: <code>Odoc.html mli |> Pandoc.commonmark |> Pandoc.html</code></p>
 
                     <p>Typically we may just stop at Markdown since Markdown (together with YAML frontmatter)
                         is the conventional content format for static site generators.
-                        <a href="https://github.github.com/gfm/">GitHub Flavored Markdown</a> is a common Markdown
-                        format,
-                        in use in GitHub (obviously)
-                        and in the <a href="https://www.gatsbyjs.com/plugins/gatsby-transformer-remark/">Gatsby</a>
-                        static site generator.
+                        <a href="https://commonmark.org/">CommonMark</a> is a common Markdown
+                        format (no pun intended), and saves as the basis for other Markdown extensions
+                        like <a href="https://myst-parser.readthedocs.io/en/latest/">MyST</a>.
+                    </p>
+                    <p>MyST in particular may be a good temporary escape hatch to add features to odoc (we'll
+                        see some experiments on this).
                     </p>
 
                     <p>Converting again to HTML lets us visually inspect <strong>how much information has
@@ -61,27 +62,10 @@
                         <strong>pandoc</strong> is a good temporary solution until
                         <a href="https://github.com/ocaml/odoc/issues/709">Issue #709</a> is complete.
                     </p>
-                    <ol>
-                        <li>There are very minor spacing differences. Which is natural because you can't
-                            specify spacing in Markdown.
-                        </li>
-                        <li>OCaml code blocks are not in color</li>
-                        <li>The table of contents is inline rather than on the side</li>
-                        <li>Raw HTML is lost completely</li>
-                        <li>At the bottom of the Results the module references are rendered incorrectly:
-                            <pre>
-    module X`` `` :sig...end``
-    module Y`` `` :sig...end``
-                            </pre>
-
-                            The original shows what it should have been:
-
-                            <pre>
-    module X : sig ... end
-    module Y : sig ... end                                
-                            </pre>
-                        </li>
-                    </ol>
+                    <p>The issues with CommonMark Markdown are the same as the GitHub Flavored Markdown.
+                        See <a href="../200-gfm-lossiness/index.html">Experiment 200-gfm-lossiness</a> for
+                        those issues.
+                    </p>
                 </div>
             </div>
         </div>
