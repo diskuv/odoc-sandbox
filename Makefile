@@ -69,7 +69,7 @@ $(IDE_ARTIFACTS): $(SWITCH_ARTIFACTS) $(MSYS2_CLANG64_PREREQS)
 # ------------------------------ Assets -----------------------------
 
 .PHONY: assets
-assets: exp/res/odoc-theme/highlight.pack.js exp/res/odoc-theme/odoc.css
+assets: exp/res/odoc-theme/highlight.pack.js exp/res/odoc-theme/odoc.css exp/res/pygments/pygments.css
 
 exp/res/odoc-theme/highlight.pack.js: $(OPAMPKGS_ARTIFACTS)
 	export OPAMYES=1 OPAMSWITCH='$(OPAMSWITCH)' && \
@@ -80,6 +80,10 @@ exp/res/odoc-theme/odoc.css: $(OPAMPKGS_ARTIFACTS)
 	export OPAMYES=1 OPAMSWITCH='$(OPAMSWITCH)' && \
 	ODOC_SHARE=$$(opam var odoc:share) && \
 	opam exec -- diskuvbox copy-file "$$ODOC_SHARE/odoc-theme/default/odoc.css" $@
+
+#	Have a look at the styles at https://pygments.org/styles/ or just run pygmenter -L
+exp/res/pygments/pygments.css:
+	pygmentize -S rrt -f html -a pre.code > $@
 
 # ------------------------ Development Tasks ------------------------
 

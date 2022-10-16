@@ -1,9 +1,0 @@
-; Have a look at the styles at https://pygments.org/styles/ or just run pygmenter -L
-
-(rule
- (target pygments.css)
- (mode fallback)
- (action
-  (with-stdout-to
-   %{target}
-   (run pygmentize -S gruvbox-dark -f html -a pre.code))))

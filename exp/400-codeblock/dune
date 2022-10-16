@@ -61,7 +61,7 @@
     (pipe-stdout
       (run myst-docutils-html5 --myst-all-links-external=True --myst-highlight-code-blocks=True
         --source-link --source-url=%{dep:../../content-highlighted/feature_codeblock.mli.html}
-        --stylesheet-path=minimal.css,responsive.css,%{dep:../../res/odoc-theme/odoc.css},%{dep:../../res/odoc-theme/odoc-myst-fixup.css},%{dep:../../res/pygments/pygments.css}
+        --stylesheet-path=minimal.css,%{dep:../../res/odoc-theme/odoc.css},%{dep:../../res/odoc-theme/odoc-myst-fixup.css},%{dep:../../res/pygments/pygments.css}
         %{dep:Feature_codeblock.md.gen3})
       (run sed "s@<a href=\"#\\([^\"]*\\)\" class=\"anchor\"></a>@<a id=\"\\1\" class=\"anchor\"></a>@g")))))
  ; diff/promote
