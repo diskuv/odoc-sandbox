@@ -36,7 +36,19 @@
 
             <dt><a href="300-myst-preformatted/index.html">300-myst-preformatted</a></dt>
             <dd>rendering formatted Markdown through MyST Markdown with
-                <code>Odoc.html mli |> Pandoc.gfm |> Mdformat.format |> MyST_docutils.html5</code>
+                <code>Odoc.html mli |> Pandoc.gfm </code>
+                <code>|> Mdformat.format |> MyST_docutils.html5</code>
+            </dd>
+
+            <dt><a href="400-codeblock/index.html">400-codeblock</a></dt>
+            <dd><strong>Proposed new feature</strong>: Odoc verbatim blocks
+                <pre><code>{v
+::code-block:: LANGUAGE
+
+source code
+v}</code></pre> with embedded code blocks. Simulated by
+                <code>Odoc.html mli |> Pandoc.gfm |> Mdformat.format</code>
+                <code>|> lift_code_block |> MyST_docutils.html5</code>
             </dd>
 
         </dl>

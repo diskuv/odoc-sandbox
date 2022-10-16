@@ -1,0 +1,15 @@
+(rule
+ (target feature_codeblock.mli.html)
+ (mode promote)
+ (action
+  (run
+   pygmentize
+   -f
+   html
+   -l
+   ocaml
+   -O
+   full,style=emacs,linenos=1
+   -o
+   %{target}
+   %{dep:../../content/feature_codeblock.mli})))

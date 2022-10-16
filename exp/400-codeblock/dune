@@ -1,0 +1,88 @@
+; Adapted from https://github.com/ocaml/odoc/blob/master/test/generators/link.dune.inc
+
+(rule
+ (target feature_codeblock.cmti)
+ (action
+  (run ocamlc -c -bin-annot -o %{target} %{dep:../../content/feature_codeblock.mli})))
+
+(rule
+ (target feature_codeblock.odoc)
+ (action
+  (run odoc compile -o %{target} %{dep:feature_codeblock.cmti})))
+
+(rule
+ (target feature_codeblock.odocl)
+ (action
+  (run odoc link -o %{target} %{dep:feature_codeblock.odoc})))
+
+(subdir
+ html
+ (rule
+  (targets Feature_codeblock.html.gen)
+  (action
+   (run
+    odoc
+    html-generate
+    --indent
+    --flat
+    --support-uri=../../res/odoc-theme
+    --theme-uri=../../res/odoc-theme
+    --extra-suffix
+    gen
+    -o
+    .
+    %{dep:../feature_codeblock.odocl})))
+ ; to Markdown
+ (rule
+  (target Feature_codeblock.md.gen)
+  (action
+   (run pandoc -f html -t gfm -o %{target} %{dep:Feature_codeblock.html.gen})))
+ ; mdformat to make all code blocks consistently use backticks (```)
+ (rule
+  (target Feature_codeblock.md.gen2)
+  (action
+   (with-stdout-to %{target} (with-stdin-from %{dep:Feature_codeblock.md.gen} (run mdformat -)))))
+ ; lift [::code-block:: LANGUAGE] into [```LANGUAGE]
+ (rule
+  (target Feature_codeblock.md.gen3)
+  (action
+   (with-stdout-to %{target} (run 
+   awk 
+   -f %{dep:../lift_codeblock.awk} 
+  ; "{print}"
+   
+   %{dep:Feature_codeblock.md.gen2}))))
+ ; to HTML with MyST
+ ; - also fixup <a href="#styling" class="anchor"></a> to be <a class="anchor" id="styling"></a>
+ (rule
+  (target Feature_codeblock.html.gen2)
+  (action
+   (with-stdout-to %{target}
+    (pipe-stdout
+      (run myst-docutils-html5 --myst-all-links-external=True --myst-highlight-code-blocks=True
+        --source-link --source-url=%{dep:../../content-highlighted/feature_codeblock.mli.html}
+        --stylesheet-path=minimal.css,responsive.css,%{dep:../../res/odoc-theme/odoc.css},%{dep:../../res/odoc-theme/odoc-myst-fixup.css},%{dep:../../res/pygments/pygments.css}
+        %{dep:Feature_codeblock.md.gen3})
+      (run sed "s@<a href=\"#\\([^\"]*\\)\" class=\"anchor\"></a>@<a id=\"\\1\" class=\"anchor\"></a>@g")))))
+ ; diff/promote
+ (rule
+  (alias runtest)
+  (action
+   (diff Feature_codeblock.html Feature_codeblock.html.gen2)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Feature_codeblock.md Feature_codeblock.md.gen3))))
+
+
+(subdir
+ html
+ (rule
+  (action
+   (with-outputs-to
+    feature_codeblock.targets.gen
+    (run odoc html-targets -o . %{dep:../feature_codeblock.odocl} --flat))))
+ (rule
+  (alias runtest)
+  (action
+   (diff feature_codeblock.targets feature_codeblock.targets.gen))))
