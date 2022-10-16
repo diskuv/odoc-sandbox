@@ -2,7 +2,7 @@
 
 (rule
  (target pygments.css)
- (mode promote)
+ (mode fallback)
  (action
   (with-stdout-to
    %{target}
