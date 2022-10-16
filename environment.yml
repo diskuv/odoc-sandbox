@@ -7,3 +7,8 @@ dependencies:
   - sphinx
   - pandoc
   - mdformat
+  - myst-parser
+  # undocumented dependency of myst_parser/parsers/docutils_py > ... > markdown_it/rules_core/linkify.py:
+  # https://github.com/executablebooks/markdown-it-py/issues/191
+  # (only when --myst-gfm-only=True option used)
+  - linkify-it-py

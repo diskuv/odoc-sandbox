@@ -1,0 +1,127 @@
+; Adapted from https://github.com/ocaml/odoc/blob/master/test/generators/link.dune.inc
+
+(rule
+ (target markup.cmti)
+ (action
+  (run ocamlc -c -bin-annot -o %{target} %{dep:../../content/markup.mli})))
+
+(rule
+ (target markup.odoc)
+ (action
+  (run odoc compile -o %{target} %{dep:markup.cmti})))
+
+(rule
+ (target markup.odocl)
+ (action
+  (run odoc link -o %{target} %{dep:markup.odoc})))
+
+(subdir
+ html
+ (rule
+  (targets Markup.html.gen Markup-X.html.gen Markup-Y.html.gen)
+  (action
+   (run
+    odoc
+    html-generate
+    --indent
+    --flat
+    --support-uri=../../res/odoc-theme
+    --theme-uri=../../res/odoc-theme
+    --extra-suffix
+    gen
+    -o
+    .
+    %{dep:../markup.odocl})))
+ ; to Markdown
+ (rule
+  (target Markup.md.gen)
+  (action
+   (run pandoc -f html -t gfm -o %{target} %{dep:Markup.html.gen})))
+ (rule
+  (target Markup-X.md.gen)
+  (action
+   (run pandoc -f html -t gfm -o %{target} %{dep:Markup-X.html.gen})))
+ (rule
+  (target Markup-Y.md.gen)
+  (action
+   (run pandoc -f html -t gfm -o %{target} %{dep:Markup-Y.html.gen})))
+ ; mdformat to make all code blocks consistently use backticks (```)
+ (rule
+  (target Markup.md.gen2)
+  (action
+   (with-stdout-to %{target} (with-stdin-from %{dep:Markup.md.gen} (run mdformat -)))))
+ (rule
+  (target Markup-X.md.gen2)
+  (action
+   (with-stdout-to %{target} (with-stdin-from %{dep:Markup-X.md.gen} (run mdformat -)))))
+ (rule
+  (target Markup-Y.md.gen2)
+  (action
+   (with-stdout-to %{target} (with-stdin-from %{dep:Markup-Y.md.gen} (run mdformat -)))))
+ ; to HTML with MyST
+ ; - also fixup <a href="#styling" class="anchor"></a> to be <a class="anchor" id="styling"></a>
+ (rule
+  (target Markup.html.gen2)
+  (action
+   (with-stdout-to %{target}
+    (pipe-stdout
+      (run myst-docutils-html5 --myst-all-links-external=True --myst-highlight-code-blocks=True
+        --stylesheet-path=minimal.css,plain.css,%{dep:../../res/odoc-theme/odoc.css},%{dep:../../res/odoc-theme/odoc-myst-fixup.css}
+        %{dep:Markup.md.gen2})
+      (run sed "s@<a href=\"#\\([^\"]*\\)\" class=\"anchor\"></a>@<a id=\"\\1\" class=\"anchor\"></a>@g")))))
+ (rule
+  (target Markup-X.html.gen2)
+  (action
+   (with-stdout-to %{target}
+    (pipe-stdout
+      (run myst-docutils-html5 --myst-all-links-external=True --myst-highlight-code-blocks=True
+       --stylesheet-path=minimal.css,plain.css,%{dep:../../res/odoc-theme/odoc.css},%{dep:../../res/odoc-theme/odoc-myst-fixup.css}
+       %{dep:Markup-X.md.gen2})
+      (run sed "s@<a href=\"#\\([^\"]*\\)\" class=\"anchor\"></a>@<a id=\"\\1\" class=\"anchor\"></a>@g")))))
+ (rule
+  (target Markup-Y.html.gen2)
+  (action
+   (with-stdout-to %{target}
+    (pipe-stdout
+      (run myst-docutils-html5 --myst-all-links-external=True --myst-highlight-code-blocks=True
+       --stylesheet-path=minimal.css,plain.css,%{dep:../../res/odoc-theme/odoc.css},%{dep:../../res/odoc-theme/odoc-myst-fixup.css}
+       %{dep:Markup-Y.md.gen2})
+      (run sed "s@<a href=\"#\\([^\"]*\\)\" class=\"anchor\"></a>@<a id=\"\\1\" class=\"anchor\"></a>@g")))))
+ ; diff/promote
+ (rule
+  (alias runtest)
+  (action
+   (diff Markup.html Markup.html.gen2)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Markup-X.html Markup-X.html.gen2)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Markup-Y.html Markup-Y.html.gen2)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Markup.md Markup.md.gen2)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Markup-X.md Markup-X.md.gen2)))
+ (rule
+  (alias runtest)
+  (action
+   (diff Markup-Y.md Markup-Y.md.gen2))))
+
+
+(subdir
+ html
+ (rule
+  (action
+   (with-outputs-to
+    markup.targets.gen
+    (run odoc html-targets -o . %{dep:../markup.odocl} --flat))))
+ (rule
+  (alias runtest)
+  (action
+   (diff markup.targets markup.targets.gen))))

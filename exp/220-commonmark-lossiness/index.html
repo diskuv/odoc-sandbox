@@ -29,13 +29,8 @@
                     <p>Typically we may just stop at Markdown since Markdown (together with YAML frontmatter)
                         is the conventional content format for static site generators.
                         <a href="https://commonmark.org/">CommonMark</a> is a common Markdown
-                        format (no pun intended), and saves as the basis for other Markdown extensions
-                        like <a href="https://myst-parser.readthedocs.io/en/latest/">MyST</a>.
+                        format (no pun intended), and almost all Markdown tools can process CommonMark.
                     </p>
-                    <p>MyST in particular may be a good temporary escape hatch to add features to odoc (we'll
-                        see some experiments on this).
-                    </p>
-
                     <p>Converting again to HTML lets us visually inspect <strong>how much information has
                             disappeared</strong>
                         in the conversion to Markdown <strong>using pandoc</strong>.</p>
@@ -57,10 +52,9 @@
             <div class="card">
                 <h5 class="card-header">Conclusion</h5>
                 <div class="card-body">
-                    <p>Using pandoc to produce Markdown results in little loss of information but a substantial amount
-                        of styling lost.
-                        <strong>pandoc</strong> is a good temporary solution until
-                        <a href="https://github.com/ocaml/odoc/issues/709">Issue #709</a> is complete.
+                    <p>Using pandoc to produce CommonMark Markdown results in some loss of information.
+                        Use GitHub Flavored Markdown as an intermediate file format instead because it loses less
+                        information!
                     </p>
                     <p>CommonMark Markdown has all the same issues as GitHub Flavored Markdown, and it adds its
                         own issues.

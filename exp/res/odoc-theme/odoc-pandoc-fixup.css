@@ -1,7 +1,7 @@
 /* odoc.css expects that the DOM elements are arranged by the odoc HTML generator.
 
    When we go from odoc HTML to some intermediate format (ex. MarkDown) and then
-   back to HTML, we will lose some of the DOM structure.
+   back to HTML using pandoc, we will lose some of the DOM structure.
 
    This CSS fixes that.
 */
@@ -19,7 +19,7 @@ odoc HTML:
   </nav>
 </body>
 
-DOM after intermediate format:
+DOM after pandoc (from .md to .html):
 
 <body>
   <ul>

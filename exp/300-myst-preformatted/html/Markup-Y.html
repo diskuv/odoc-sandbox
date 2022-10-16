@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<title>Markup-Y.md.gen2</title>
+<style type="text/css">
+
+/* Minimal style sheet for the HTML output of Docutils.                    */
+/*                                                                         */
+/* :Author: Günter Milde, based on html4css1.css by David Goodger          */
+/* :Id: $Id: minimal.css 9079 2022-06-19 14:00:56Z milde $                                                               */
+/* :Copyright: © 2015, 2021 Günter Milde.                                  */
+/* :License: Released under the terms of the `2-Clause BSD license`_,      */
+/*    in short:                                                            */
+/*                                                                         */
+/*    Copying and distribution of this file, with or without modification, */
+/*    are permitted in any medium without royalty provided the copyright   */
+/*    notice and this notice are preserved.                                */
+/*                                                                         */
+/*    This file is offered as-is, without any warranty.                    */
+/*                                                                         */
+/* .. _2-Clause BSD license: http://www.spdx.org/licenses/BSD-2-Clause     */
+
+/* This CSS3 stylesheet defines rules for Docutils elements without        */
+/* HTML equivalent. It is required to make the document semantics visible. */
+/*                                                                         */
+/* .. _validates: http://jigsaw.w3.org/css-validator/validator$link        */
+
+/* titles */
+p.topic-title,
+p.admonition-title,
+p.system-message-title {
+  font-weight: bold;
+}
+p.sidebar-title,
+p.rubric {
+  font-weight: bold;
+  font-size: larger;
+}
+p.rubric {
+  color: maroon;
+}
+p.subtitle,
+p.section-subtitle,
+p.sidebar-subtitle {
+  font-weight: bold;
+  margin-top: -0.5em;
+}
+h1 + p.subtitle {
+  font-size: 1.6em;
+}
+a.toc-backref {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Warnings, Errors */
+.system-messages h2,
+.system-message-title,
+span.problematic {
+  color: red;
+}
+
+/* Inline Literals */
+.docutils.literal {
+  font-family: monospace;
+  white-space: pre-wrap;
+}
+/* do not wrap at hyphens and similar: */
+.literal > span.pre { white-space: nowrap; }
+
+/* Lists */
+
+/* compact and simple lists: no margin between items */
+.simple  li, .simple  ul, .simple  ol,
+.compact li, .compact ul, .compact ol,
+.simple  > li p, dl.simple  > dd,
+.compact > li p, dl.compact > dd {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+/* Nested Paragraphs */
+p:first-child { margin-top: 0; }
+p:last-child { margin-bottom: 0; }
+details > p:last-child { margin-bottom: 1em; }
+
+/* Table of Contents */
+.contents ul.auto-toc { /* section numbers present */
+  list-style-type: none;
+}
+
+/* Enumerated Lists */
+ol.arabic     { list-style: decimal }
+ol.loweralpha { list-style: lower-alpha }
+ol.upperalpha { list-style: upper-alpha }
+ol.lowerroman { list-style: lower-roman }
+ol.upperroman { list-style: upper-roman }
+
+/* Definition Lists and Derivatives */
+dt .classifier { font-style: italic }
+dt .classifier:before {
+  font-style: normal;
+  margin: 0.5em;
+  content: ":";
+}
+/* Field Lists and similar */
+/* bold field name, content starts on the same line */
+dl.field-list,
+dl.option-list,
+dl.docinfo {
+  display: flow-root;
+}
+dl.field-list > dt,
+dl.option-list > dt,
+dl.docinfo > dt {
+  font-weight: bold;
+  clear: left;
+  float: left;
+  margin: 0;
+  padding: 0;
+  padding-right: 0.2em;
+}
+/* Offset for field content (corresponds to the --field-name-limit option) */
+dl.field-list > dd,
+dl.option-list > dd,
+dl.docinfo > dd {
+  margin-left:  9em; /* ca. 14 chars in the test examples, fit all Docinfo fields */
+}
+/* start nested lists on new line */
+dd > dl:first-child,
+dd > ul:first-child,
+dd > ol:first-child {
+  clear: left;
+}
+/* start field-body on a new line after long field names */
+dl.field-list > dd > *:first-child,
+dl.option-list > dd > *:first-child
+{
+  display: inline-block;
+  width: 100%;
+  margin: 0;
+}
+
+/* Bibliographic Fields (docinfo) */
+dl.docinfo pre.address {
+  font: inherit;
+  margin: 0.5em 0;
+}
+dl.docinfo > dd.authors > p { margin: 0; }
+
+/* Option Lists */
+dl.option-list > dt { font-weight: normal; }
+span.option { white-space: nowrap; }
+
+/* Footnotes and Citations  */
+
+.footnote, .citation { margin: 1em 0; } /* default paragraph skip (Firefox) */
+/* hanging indent */
+.citation { padding-left: 2em; }
+.footnote { padding-left: 1.7em; }
+.footnote.superscript { padding-left: 1.0em; }
+.citation > .label { margin-left: -2em; }
+.footnote > .label { margin-left: -1.7em; }
+.footnote.superscript > .label { margin-left: -1.0em; }
+
+.footnote > .label + *,
+.citation > .label + * {
+  display: inline-block;
+  margin-top: 0;
+  vertical-align: top;
+}
+.footnote > .backrefs + *,
+.citation > .backrefs + * {
+  margin-top: 0;
+}
+.footnote > .label + p, .footnote > .backrefs + p,
+.citation > .label + p, .citation > .backrefs + p {
+  display: inline;
+  vertical-align: inherit;
+}
+
+.backrefs { user-select: none; }
+.backrefs > a { font-style: italic; }
+
+/* superscript footnotes */
+a[role="doc-noteref"].superscript,
+.footnote.superscript > .label,
+.footnote.superscript > .backrefs {
+  vertical-align: super;
+  font-size: smaller;
+  line-height: 1;
+}
+a[role="doc-noteref"].superscript > .fn-bracket,
+.footnote.superscript > .label > .fn-bracket {
+  /* hide brackets in display but leave for copy/paste */
+  display: inline-block;
+  width: 0;
+  overflow: hidden;
+}
+[role="doc-noteref"].superscript + [role="doc-noteref"].superscript {
+  padding-left: 0.15em; /* separate consecutive footnote references */
+  /* TODO: unfortunately, "+" also selects with text between the references. */
+}
+
+/* Alignment */
+.align-left   {
+  text-align: left;
+  margin-right: auto;
+}
+.align-center {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.align-right  {
+  text-align: right;
+  margin-left: auto;
+}
+.align-top    { vertical-align: top; }
+.align-middle { vertical-align: middle; }
+.align-bottom { vertical-align: bottom; }
+
+/* reset inner alignment in figures and tables */
+figure.align-left, figure.align-right,
+table.align-left, table.align-center, table.align-right {
+  text-align: inherit;
+}
+
+/* Text Blocks */
+.topic { margin: 1em 2em; }
+.sidebar,
+.admonition,
+.system-message {
+  margin: 1em 2em;
+  border: thin solid;
+  padding: 0.5em 1em;
+}
+div.line-block { display: block; }
+div.line-block div.line-block, pre { margin-left: 2em; }
+
+/* Code line numbers: dropped when copying text from the page */
+pre.code .ln { display: none; }
+pre.code code:before {
+  content: attr(data-lineno); /* …, none) fallback not supported by any browser */
+  color: gray;
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+}
+td, th {
+  border: thin solid silver;
+  padding: 0 1ex;
+}
+.borderless td, .borderless th {
+  border: 0;
+  padding: 0;
+  padding-right: 0.5em /* separate table cells */
+}
+
+table > caption {
+  text-align: left;
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+}
+table.captionbelow {
+  caption-side: bottom;
+}
+
+/* Document Header and Footer */
+header { border-bottom: 1px solid black; }
+footer { border-top: 1px solid black; }
+
+/* Images are block-level by default in Docutils */
+/* New HTML5 block elements: set display for older browsers */
+img, header, footer, main, aside, nav, section, figure, video, details {
+  display: block;
+}
+/* inline images */
+p img, p video, figure img, figure video {
+  display: inline;
+}
+
+</style>
+<style type="text/css">
+
+/* CSS31_ style sheet for the output of Docutils HTML writers.             */
+/* Rules for easy reading and pre-defined style variants.                  */
+/*                                                                         */
+/* :Author: Günter Milde, based on html4css1.css by David Goodger          */
+/* :Id: $Id: plain.css 9081 2022-06-19 20:23:12Z milde $                                                               */
+/* :Copyright: © 2015 Günter Milde.                                        */
+/* :License: Released under the terms of the `2-Clause BSD license`_,      */
+/*    in short:                                                            */
+/*                                                                         */
+/*    Copying and distribution of this file, with or without modification, */
+/*    are permitted in any medium without royalty provided the copyright   */
+/*    notice and this notice are preserved.                                */
+/*                                                                         */
+/*    This file is offered as-is, without any warranty.                    */
+/*                                                                         */
+/* .. _2-Clause BSD license: http://www.spdx.org/licenses/BSD-2-Clause     */
+/* .. _CSS3: https://www.w3.org/Style/CSS/                                 */
+
+
+/* Document Structure */
+/* ****************** */
+
+/* "page layout" */
+body {
+  margin: 0;
+  background-color: #dbdbdb;
+  --field-indent: 9em; /* default indent of fields in field lists */
+}
+main, footer, header {
+  line-height:1.6;
+  /* avoid long lines --> better reading */
+  /* optimum is 45…75 characters/line <http://webtypography.net/2.1.2> */
+  /* OTOH: lines should not be too short because of missing hyphenation, */
+  max-width: 50rem;
+  padding: 1px 2%; /* 1px on top avoids grey bar above title (mozilla) */
+  margin: auto;
+}
+main {
+  counter-reset: table figure;
+  background-color: white;
+}
+footer, header {
+  font-size: smaller;
+  padding: 0.5em 2%;
+  border: none;
+}
+
+/* Table of Contents */
+ul.auto-toc > li > p {
+  padding-left: 1em;
+  text-indent: -1em;
+}
+nav.contents ul {
+  padding-left: 1em;
+}
+main > nav.contents ul ul ul ul:not(.auto-toc) {
+  list-style-type: '\2B29\ ';
+}
+main > nav.contents ul ul ul ul ul:not(.auto-toc) {
+  list-style-type: '\2B1D\ ';
+}
+
+/* Transitions */
+hr.docutils {
+  width: 80%;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  clear: both;
+}
+
+/* Paragraphs */
+
+/* vertical space (parskip) */
+p, ol, ul, dl, li,
+div.line-block,
+.footnote, .citation,
+div > math,
+table {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+h1, h2, h3, h4, h5, h6,
+dd, details > p:last-child {
+  margin-bottom: 0.5em;
+}
+
+/* Lists */
+/* ===== */
+
+/* Definition Lists */
+/* Indent lists nested in definition lists */
+dd > ul:only-child, dd > ol:only-child { padding-left: 1em; }
+
+/* Description Lists */
+/* styled like in most dictionaries, encyclopedias etc. */
+dl.description {
+  display: flow-root;
+}
+dl.description > dt {
+  font-weight: bold;
+  clear: left;
+  float: left;
+  margin: 0;
+  padding: 0;
+  padding-right: 0.3em;
+}
+dl.description > dd:after {
+  display: table;
+  content: "";
+  clear: left; /* clearfix for empty descriptions */
+}
+
+/* Field Lists */
+
+dl.field-list > dd,
+dl.docinfo > dd {
+  margin-left: var(--field-indent); /* adapted in media queries or HTML */
+}
+
+/* example for custom field-name width */
+dl.field-list.narrow > dd {
+  --field-indent: 5em;
+}
+/* run-in: start field-body on same line after long field names */
+dl.field-list.run-in > dd p {
+  display: block;
+}
+
+/* Bibliographic Fields */
+
+/* generally, bibliographic fields use dl.docinfo */
+/* but dedication and abstract are placed into divs */
+div.abstract p.topic-title {
+  text-align: center;
+}
+div.dedication {
+  margin: 2em 5em;
+  text-align: center;
+  font-style: italic;
+}
+div.dedication p.topic-title {
+  font-style: normal;
+}
+
+/* disclosures */
+details { padding-left: 1em; }
+summary { margin-left: -1em; }
+
+/* Text Blocks */
+/* =========== */
+
+/* Literal Blocks */
+pre.literal-block, pre.doctest-block,
+pre.math, pre.code {
+  font-family: monospace;
+}
+
+/* Block Quotes and Topics */
+bockquote { margin: 1em 2em; }
+blockquote p.attribution,
+.topic p.attribution {
+  text-align: right;
+  margin-left: 20%;
+}
+
+/* Tables */
+/* ====== */
+
+/* th { vertical-align: bottom; } */
+
+table tr { text-align: left; }
+
+/* "booktabs" style (no vertical lines) */
+table.booktabs {
+  border: 0;
+  border-top: 2px solid;
+  border-bottom: 2px solid;
+  border-collapse: collapse;
+}
+table.booktabs * {
+  border: 0;
+}
+table.booktabs th {
+  border-bottom: thin solid;
+}
+
+/* numbered tables (counter defined in div.document) */
+table.numbered > caption:before {
+  counter-increment: table;
+  content: "Table " counter(table) ": ";
+  font-weight: bold;
+}
+
+/* Explicit Markup Blocks */
+/* ====================== */
+
+/* Footnotes and Citations */
+/* ----------------------- */
+
+/* line on the left */
+.footnote-list {
+  border-left: solid thin;
+  padding-left: 0.25em;
+}
+
+/* Directives */
+/* ---------- */
+
+/* Body Elements */
+/* ~~~~~~~~~~~~~ */
+
+/* Images and Figures */
+
+/* let content flow to the side of aligned images and figures */
+figure.align-left,
+img.align-left,
+video.align-left,
+object.align-left {
+  clear: left;
+  float: left;
+  margin-right: 1em;
+}
+figure.align-right,
+img.align-right,
+video.align-right,
+object.align-right {
+  clear: right;
+  float: right;
+  margin-left: 1em;
+}
+/* Stop floating sidebars, images and figures */
+h1, h2, h3, h4, footer, header { clear: both; }
+
+/* Numbered figures */
+figure.numbered > figcaption > p:before {
+  counter-increment: figure;
+  content: "Figure " counter(figure) ": ";
+  font-weight: bold;
+}
+
+/* Admonitions and System Messages */
+.caution p.admonition-title,
+.attention p.admonition-title,
+.danger p.admonition-title,
+.error p.admonition-title,
+.warning p.admonition-title,
+div.error {
+  color: red;
+}
+
+/* Sidebar */
+/* Move right. In a layout with fixed margins, */
+/* it can be moved into the margin.            */
+aside.sidebar {
+  width: 30%;
+  max-width: 26em;
+  float: right;
+  clear: right;
+  margin-left: 1em;
+  margin-right: -1%;
+  background-color: #fffffa;
+}
+
+
+/* Code */
+pre.code { padding: 0.7ex }
+pre.code, code { background-color: #eeeeee }
+/* basic highlighting: for a complete scheme, see */
+/* https://docutils.sourceforge.io/sandbox/stylesheets/ */
+pre.code .comment, code .comment { color: #5C6576 }
+pre.code .keyword, code .keyword { color: #3B0D06; font-weight: bold }
+pre.code .literal.string, code .literal.string { color: #0C5404 }
+pre.code .name.builtin, code .name.builtin { color: #352B84 }
+pre.code .deleted, code .deleted { background-color: #DEB0A1}
+pre.code .inserted, code .inserted { background-color: #A3D289}
+
+/* Math */
+/* for math-output=MathML (for math-output=HTML, see math.css) */
+math .boldsymbol {
+  font-weight: bold;
+}
+mstyle.mathscr, mi.mathscr {
+  font-family: STIX;
+}
+
+/* Epigraph           */
+/* Highlights         */
+/* Pull-Quote         */
+/* Compound Paragraph */
+/* Container          */
+
+/* Inline Markup */
+/* ============= */
+
+sup, sub { line-height: 0.8; } /* do not add leading for lines with sup/sub */
+
+/* Inline Literals                                          */
+/* possible values: normal, nowrap, pre, pre-wrap, pre-line */
+/*   span.docutils.literal { white-space: pre-wrap; }       */
+
+/* Hyperlink References */
+a { text-decoration: none; }
+
+/* External Targets       */
+/*   span.target.external */
+/* Internal Targets       */
+/*   span.target.internal */
+/* Footnote References    */
+/*   a[role="doc-noteref"] */
+/* Citation References    */
+/*   a.citation-reference */
+
+</style>
+<style type="text/css">
+
+@charset "UTF-8";
+/* Copyright (c) 2016 The odoc contributors. All rights reserved.
+   Distributed under the ISC license, see terms at the end of the file.
+   odoc 2.1.1 */
+
+/* Fonts */
+@import url('https://fonts.googleapis.com/css?family=Fira+Mono:400,500');
+@import url('https://fonts.googleapis.com/css?family=Noticia+Text:400,400i,700');
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans:400,400i,500,500i,600,600i,700,700i');
+
+:root,
+.light:root {
+   --main-background: #FFFFFF;
+
+  --color: #333333;
+  --link-color: #2C94BD;
+  --anchor-hover: #555;
+  --anchor-color: #d5d5d5;
+  --xref-shadow: #cc6666;
+  --header-shadow: #ddd;
+  --by-name-version-color: #aaa;
+  --by-name-nav-link-color: #222;
+  --target-background: rgba(187, 239, 253, 0.3);
+  --target-shadow: rgba(187, 239, 253, 0.8);
+  --pre-border-color: #eee;
+  --code-background: #f6f8fa;
+
+  --li-code-background: #f6f8fa;
+  --li-code-color: #0d2b3e;
+  --toc-color: #1F2D3D;
+  --toc-before-color: #777;
+  --toc-background: #f6f8fa;
+  --toc-list-border: #ccc;
+
+  --spec-summary-border-color: #5c9cf5;
+  --spec-summary-background: var(--code-background);
+  --spec-summary-hover-background: #ebeff2;
+  --spec-details-after-background: rgba(0, 4, 15, 0.05);
+  --spec-details-after-shadow: rgba(204, 204, 204, 0.53);
+}
+
+.dark:root {
+  --main-background: #202020;
+  --code-background: #222;
+  --line-numbers-background: rgba(0, 0, 0, 0.125);
+  --navbar-background: #202020;
+
+  --color: #bebebe;
+  --dirname-color: #666;
+  --underline-color: #444;
+  --visited-color: #002800;
+  --visited-number-color: #252;
+  --unvisited-color: #380000;
+  --unvisited-number-color: #622;
+  --somevisited-color: #303000;
+  --highlight-color: #303e3f;
+  --line-number-color: rgba(230, 230, 230, 0.3);
+  --unvisited-margin-color: #622;
+  --border: #333;
+  --navbar-border: #333;
+  --code-color: #ccc;
+
+  --li-code-background: #373737;
+  --li-code-color: #999;
+  --toc-color: #777;
+  --toc-background: #252525;
+
+  --hljs-link: #999;
+  --hljs-keyword: #cda869;
+  --hljs-regexp: #f9ee98;
+  --hljs-title: #dcdcaa;
+  --hljs-type: #ac885b;
+  --hljs-meta: #82aaff;
+  --hljs-variable: #cf6a4c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --main-background: #202020;
+    --code-background: #333;
+    --line-numbers-background: rgba(0, 0, 0, 0.125);
+    --navbar-background: #202020;
+
+    --meter-unvisited-color: #622;
+    --meter-visited-color: #252;
+    --meter-separator-color: black;
+
+    --color: #bebebe;
+    --dirname-color: #666;
+    --underline-color: #444;
+    --visited-color: #002800;
+    --visited-number-color: #252;
+    --unvisited-color: #380000;
+    --unvisited-number-color: #622;
+    --somevisited-color: #303000;
+    --highlight-color: #303e3f;
+    --line-number-color: rgba(230, 230, 230, 0.3);
+    --unvisited-margin-color: #622;
+    --border: #333;
+    --navbar-border: #333;
+    --code-color: #ccc;
+    --by-name-nav-link-color: var(--color);
+
+    --li-code-background: #373737;
+    --li-code-color: #999;
+    --toc-color: #777;
+    --toc-before-color: #777;
+    --toc-background: #252525;
+    --toc-list-border: #ccc;
+    --spec-summary-hover-background: #ebeff2;
+    --spec-details-after-background: rgba(0, 4, 15, 0.05);
+    --spec-details-after-shadow: rgba(204, 204, 204, 0.53);
+
+    --hljs-link: #999;
+    --hljs-keyword: #cda869;
+    --hljs-regexp: #f9ee98;
+    --hljs-title: #dcdcaa;
+    --hljs-type: #ac885b;
+    --hljs-meta: #82aaff;
+    --hljs-variable: #cf6a4c;
+  }
+}
+
+/* Reset a few things. */
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  padding: 0;
+  border: 0;
+  font: inherit;
+  vertical-align: baseline;
+
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 15px;
+}
+
+body {
+  text-align: left;
+  background: #FFFFFF;
+  color: var(--color);
+  background-color: var(--main-background);
+}
+
+body {
+  max-width: 100ex;
+  margin-left: calc(10vw + 20ex);
+  margin-right: 4ex;
+  margin-top: 20px;
+  margin-bottom: 50px;
+  font-family: "Noticia Text", Georgia, serif;
+  line-height: 1.5;
+}
+
+header {
+  margin-bottom: 30px;
+}
+
+nav {
+  font-family: "Fira Sans", Helvetica, Arial, sans-serif;
+}
+
+/* Basic markup elements */
+
+b, strong {
+  font-weight: bold;
+}
+
+i {
+  font-style: italic;
+}
+
+em, i em.odd{
+  font-style: italic;
+}
+
+em.odd, i em {
+  font-style: normal;
+}
+
+sup {
+  vertical-align: super;
+}
+
+sub {
+  vertical-align: sub;
+}
+
+sup, sub {
+  font-size: 12px;
+  line-height: 0;
+  margin-left: 0.2ex;
+}
+
+ul, ol {
+  list-style-position: outside
+}
+
+ul>li {
+  margin-left: 22px;
+}
+
+ol>li {
+  margin-left: 27.2px;
+}
+
+li>*:first-child {
+  margin-top: 0
+}
+
+/* Text alignements, this should be forbidden. */
+
+.left {
+  text-align: left;
+}
+
+.right {
+  text-align: right;
+}
+
+.center {
+  text-align: center;
+}
+
+/* Links and anchors */
+
+a {
+  text-decoration: none;
+  color: var(--link-color);
+}
+
+a:hover {
+  box-shadow: 0 1px 0 0 var(--link-color);
+}
+
+/* Linked highlight */
+*:target {
+  background-color: var(--target-background) !important;
+  box-shadow: 0 0px 0 1px var(--target-shadow) !important;
+  border-radius: 1px;
+}
+
+*:hover > a.anchor {
+  visibility: visible;
+}
+
+a.anchor:before {
+  content: "#";
+}
+
+a.anchor:hover {
+  box-shadow: none;
+  text-decoration: none;
+  color: var(--anchor-hover);
+}
+
+a.anchor {
+  visibility: hidden;
+  position: absolute;
+  /* top: 0px; */
+  /* margin-left: -3ex; */
+  margin-left: -1.3em;
+  font-weight: normal;
+  font-style: normal;
+  padding-right: 0.4em;
+  padding-left: 0.4em;
+  /* To remain selectable */
+  color: var(--anchor-color);
+}
+
+.spec > a.anchor {
+  margin-left: -2.3em;
+  padding-right: 0.9em;
+}
+
+.xref-unresolved {
+  color: #2C94BD;
+}
+.xref-unresolved:hover {
+  box-shadow: 0 1px 0 0 var(--xref-shadow);
+}
+
+/* Section and document divisions.
+   Until at least 4.03 many of the modules of the stdlib start at .h7,
+   we restart the sequence there like h2  */
+
+h1, h2, h3, h4, h5, h6, .h7, .h8, .h9, .h10 {
+  font-family: "Fira Sans", Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  padding-top: 0.1em;
+  line-height: 1.2;
+  overflow-wrap: break-word;
+}
+
+h1 {
+  font-weight: 500;
+  font-size: 2.441em;
+}
+
+h1 {
+  font-weight: 500;
+  font-size: 1.953em;
+  box-shadow: 0 1px 0 0 var(--header-shadow);
+}
+
+h2 {
+  font-size: 1.563em;
+}
+
+h3 {
+  font-size: 1.25em;
+}
+
+small, .font_small {
+  font-size: 0.8em;
+}
+
+h1 code, h1 tt {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+h2 code, h2 tt {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+h3 code, h3 tt {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+h3 code, h3 tt {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+h4 {
+  font-size: 1.12em;
+}
+
+/* Comment delimiters, hidden but accessible to screen readers and 
+   selected for copy/pasting */
+
+/* Taken from bootstrap */
+/* See also https://stackoverflow.com/a/27769435/4220738 */
+.comment-delim {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Preformatted and code */
+
+tt, code, pre {
+  font-family: "Fira Mono", courier;
+  font-weight: 400;
+}
+
+pre {
+  padding: 0.1em;
+  border: 1px solid var(--pre-border-color);
+  border-radius: 5px;
+  overflow-x: auto;
+}
+
+p code,
+li code {
+  background-color: var(--li-code-background);
+  color: var(--li-code-color);
+  border-radius: 3px;
+  padding: 0 0.3ex;
+}
+
+p a > code {
+  color: var(--link-color);
+}
+
+code {
+  white-space: pre-wrap;
+}
+
+/* Code blocks (e.g. Examples) */
+
+pre code {
+  font-size: 0.893rem;
+}
+
+/* Code lexemes */
+
+.keyword {
+  font-weight: 500;
+}
+
+.arrow { white-space: nowrap }
+
+/* Module member specification */
+
+.spec {
+  background-color: var(--spec-summary-background);
+  border-radius: 3px;
+  border-left: 4px solid var(--spec-summary-border-color);
+  border-right: 5px solid transparent;
+  padding: 0.35em 0.5em;
+}
+
+.def-doc {
+  margin-bottom: 10px;
+}
+
+/* Spacing between items */
+div.odoc-spec,.odoc-include {
+  margin-bottom: 2em;
+}
+
+.spec.type .variant {
+  margin-left: 2ch;
+}
+.spec.type .variant p {
+  margin: 0;
+  font-style: italic;
+}
+.spec.type .record {
+  margin-left: 2ch;
+}
+.spec.type .record p {
+  margin: 0;
+  font-style: italic;
+}
+
+div.def {
+  margin-top: 0;
+  text-indent: -2ex;
+  padding-left: 2ex;
+}
+
+div.def+div.def-doc {
+  margin-left: 1ex;
+  margin-top: 2.5px
+}
+
+div.def-doc>*:first-child {
+  margin-top: 0;
+}
+
+/* Collapsible inlined include and module */
+
+.odoc-include details {
+  position: relative;
+}
+
+.odoc-include.shadowed-include {
+  display: none;
+}
+
+.odoc-include details:after {
+  z-index: -100;
+  display: block;
+  content: " ";
+  position: absolute;
+  border-radius: 0 1ex 1ex 0;
+  right: -20px;
+  top: 1px;
+  bottom: 1px;
+  width: 15px;
+  background: var(--spec-details-after-background, rgba(0, 4, 15, 0.05));
+  box-shadow: 0 0px 0 1px var(--spec-details-after-shadow, rgba(204, 204, 204, 0.53));
+}
+
+.odoc-include summary {
+  position: relative;
+  margin-bottom: 1em;
+  cursor: pointer;
+  outline: none;
+}
+
+.odoc-include summary:hover {
+  background-color: var(--spec-summary-hover-background);
+}
+
+/* FIXME: Does not work in Firefox. */
+.odoc-include summary::-webkit-details-marker {
+  color: #888;
+  transform: scaleX(-1);
+  position: absolute;
+  top: calc(50% - 5px);
+  height: 11px;
+  right: -29px;
+}
+
+/* Records and variants FIXME */
+
+div.def table {
+  text-indent: 0em;
+  padding: 0;
+  margin-left: -2ex;
+}
+
+td.def {
+  padding-left: 2ex;
+}
+
+td.def-doc *:first-child {
+  margin-top: 0em;
+}
+
+/* Lists of @tags */
+
+.at-tags { list-style-type: none; margin-left: -3ex; }
+.at-tags li { padding-left: 3ex; text-indent: -3ex; }
+.at-tags .at-tag { text-transform: capitalize }
+
+/* Lists of modules */
+
+.modules { list-style-type: none; margin-left: -3ex; }
+.modules li { padding-left: 3ex; text-indent: -3ex; margin-top: 5px }
+.modules .synopsis { padding-left: 1ch; }
+
+/* Odig package index */
+
+.packages { list-style-type: none; margin-left: -3ex; }
+.packages li { padding-left: 3ex; text-indent: -3ex }
+.packages li a.anchor { padding-right: 0.5ch; padding-left: 3ch; }
+.packages .version { font-size: 10px; color: var(--by-name-version-color); }
+.packages .synopsis { padding-left: 1ch }
+
+.by-name nav a {
+  text-transform: uppercase;
+  font-size: 18px;
+  margin-right: 1ex;
+  color: var(--by-name-nav-link-color,);
+  display: inline-block;
+}
+
+.by-tag nav a {
+  margin-right: 1ex;
+  color: var(--by-name-nav-link-color);
+  display: inline-block;
+}
+
+.by-tag ol { list-style-type: none; }
+.by-tag ol.tags li { margin-left: 1ch; display: inline-block }
+.by-tag td:first-child { text-transform: uppercase; }
+
+/* Odig package page */
+
+.package nav {
+  display: inline;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.package .version {
+  font-size: 14px;
+}
+
+.package.info {
+  margin: 0;
+}
+
+.package.info td:first-child {
+  font-style: italic;
+  padding-right: 2ex;
+}
+
+.package.info ul {
+  list-style-type: none;
+  display: inline;
+  margin: 0;
+}
+
+.package.info li {
+  display: inline-block;
+  margin: 0;
+  margin-right: 1ex;
+}
+
+#info-authors li, #info-maintainers li {
+  display: block;
+}
+
+/* Sidebar and TOC */
+
+.odoc-toc:before {
+  display: block;
+  content: "Contents";
+  text-transform: uppercase;
+  font-size: 1em;
+  margin: 1.414em 0 0.5em;
+  font-weight: 500;
+  color: var(--toc-before-color);
+  line-height: 1.2;
+}
+
+.odoc-toc {
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  max-width: 30ex;
+  min-width: 26ex;
+  width: 20%;
+  background: var(--toc-background);
+  overflow: auto;
+  color: var(--toc-color);
+  padding-left: 2ex;
+  padding-right: 2ex;
+}
+
+.odoc-toc ul li a {
+  font-family: "Fira Sans", sans-serif;
+  font-size: 0.95em;
+  color: var(--color);
+  font-weight: 400;
+  line-height: 1.6em;
+  display: block;
+}
+
+.odoc-toc ul li a:hover {
+  box-shadow: none;
+  text-decoration: underline;
+}
+
+/* First level titles */
+
+.odoc-toc>ul>li>a {
+  font-weight: 500;
+}
+
+.odoc-toc li ul {
+  margin: 0px;
+}
+
+.odoc-toc ul {
+  list-style-type: none;
+}
+
+.odoc-toc ul li {
+  margin: 0;
+}
+.odoc-toc>ul>li {
+  margin-bottom: 0.3em;
+}
+
+.odoc-toc ul li li {
+  border-left: 1px solid var(--toc-list-border);
+  margin-left: 5px;
+  padding-left: 12px;
+}
+
+/* Mobile adjustements. */
+
+@media only screen and (max-width: 95ex) {
+  .odoc-content {
+    margin: auto;
+    padding: 2em;
+  }
+  .odoc-toc {
+    position: static;
+    width: auto;
+    min-width: unset;
+    max-width: unset;
+    border: none;
+    padding: 0.2em 1em;
+    border-radius: 5px;
+  }
+}
+
+/* Print adjustements. */
+
+@media print {
+  body {
+    color: black;
+    background: white;
+  }
+  body nav:first-child {
+    visibility: hidden;
+  }
+}
+
+/* Syntax highlighting (based on github-gist) */
+
+.hljs {
+  display: block;
+  background: var(--code-background);
+  padding: 0.5em;
+  color: var(--color);
+  overflow-x: auto;
+}
+
+.hljs-comment,
+.hljs-meta {
+  color: #969896;
+}
+
+.hljs-string,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-strong,
+.hljs-emphasis,
+.hljs-quote {
+  color: #df5000;
+}
+
+.hljs-keyword,
+.hljs-selector-tag {
+  color: #a71d5d;
+}
+
+.hljs-type,
+.hljs-class .hljs-title {
+  color: #458;
+  font-weight: 500;
+}
+
+.hljs-literal,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-attribute {
+  color: #0086b3;
+}
+
+.hljs-section,
+.hljs-name {
+  color: #63a35c;
+}
+
+.hljs-tag {
+  color: #333333;
+}
+
+.hljs-attr,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+  color: #795da3;
+}
+
+.hljs-addition {
+  color: #55a532;
+  background-color: #eaffea;
+}
+
+.hljs-deletion {
+  color: #bd2c00;
+  background-color: #ffecec;
+}
+
+.hljs-link {
+  text-decoration: underline;
+}
+
+/*---------------------------------------------------------------------------
+   Copyright (c) 2016 The odoc contributors
+
+   Permission to use, copy, modify, and/or distribute this software for any
+   purpose with or without fee is hereby granted, provided that the above
+   copyright notice and this permission notice appear in all copies.
+
+   THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+   WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+   MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+   ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+   WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+   ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+   OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+  ---------------------------------------------------------------------------*/
+
+</style>
+<style type="text/css">
+
+/* odoc.css expects that the DOM elements are arranged by the odoc HTML generator.
+
+   When we go from odoc HTML to some intermediate format (ex. MarkDown) and then
+   back to HTML using MyST, we will lose some of the DOM structure.
+
+   This CSS fixes that.
+*/
+
+/* 
+
+--------------------- PART ONE ------------------------
+
+odoc HTML:
+
+<body class="odoc">
+  <nav class="odoc-toc">
+    <ul>
+      <li>
+        <a ...></a>
+      </li>
+    </ul>
+  </nav>
+</body>
+
+DOM after MyST (from .md to .html):
+
+<body>
+  <main id="module-markup">
+    <ul class="simple">
+      <li>
+        <p>
+          <a ...></a>
+        </p>
+      </li>
+    </ul>
+  </main>
+</body>
+
+So ...
+1. Replace .odoc-toc ul {} with body>main>ul {}
+2. Replace nav {} with body>main>ul {}
+*/
+
+body>main>ul/*nav*/ {
+    font-family: "Fira Sans", Helvetica, Arial, sans-serif;
+}
+
+/* Sidebar and TOC */
+
+body>main>ul/*.odoc-toc*/:before {
+    display: block;
+    content: "Contents";
+    text-transform: uppercase;
+    font-size: 1em;
+    margin: 1.414em 0 0.5em;
+    font-weight: 500;
+    color: var(--toc-before-color);
+    line-height: 1.2;
+}
+
+body>main>ul/*.odoc-toc*/ {
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    max-width: 30ex;
+    min-width: 26ex;
+    width: 20%;
+    background: var(--toc-background);
+    overflow: auto;
+    color: var(--toc-color);
+    padding-left: 2ex;
+    padding-right: 2ex;
+}
+
+body>main>ul/* .odoc-toc ul */ li a {
+    font-family: "Fira Sans", sans-serif;
+    font-size: 0.95em;
+    color: var(--color);
+    font-weight: 400;
+    line-height: 1.6em;
+    display: block;
+}
+
+body>main>ul/* .odoc-toc ul */ li a:hover {
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+/* First level titles */
+
+body>main>ul/*.odoc-toc>ul*/>li>p/* added >p */>a {
+    font-weight: 500;
+}
+
+body>main>ul li ul {
+    margin: 0px;
+}
+
+body>main>ul/*.odoc-toc ul*/ {
+    list-style-type: none;
+}
+body>main>ul/*.odoc-toc ul*/ ul {
+    list-style-type: none;
+}
+
+body>main>ul/*.odoc-toc ul*/ li {
+    margin: 0;
+}
+
+body>main>ul/*.odoc-toc>ul*/>li {
+    margin-bottom: 0.3em;
+}
+
+body>main>ul/*.odoc-toc ul*/ li li {
+    border-left: 1px solid var(--toc-list-border);
+    margin-left: 5px;
+    padding-left: 12px;
+}
+
+/* Mobile adjustements. */
+
+@media only screen and (max-width: 95ex) {
+    body>main>ul/*.odoc-toc*/ {
+        position: static;
+        width: auto;
+        min-width: unset;
+        max-width: unset;
+        border: none;
+        padding: 0.2em 1em;
+        border-radius: 5px;
+    }
+}
+
+</style>
+</head>
+<body>
+<main>
+
+
+<p><a class="reference external" href="Markup.html">Up</a> – <a class="reference external" href="Markup.html">Markup</a> » Y</p>
+<div class="odoc-preamble">
+<section id="module-markup-y">
+<h2>Module <span class="docutils literal">Markup.Y</span></h2>
+</div>
+<div class="odoc-content">
+</div>
+</section>
+</main>
+</body>
+</html>
