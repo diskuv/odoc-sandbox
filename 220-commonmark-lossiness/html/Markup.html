@@ -20,6 +20,7 @@
     .display.math{display: block; text-align: center; margin: 0.5rem auto;}
   </style>
   <link rel="stylesheet" href="../../res/odoc-theme/odoc.css" />
+  <link rel="stylesheet" href="../../res/odoc-theme/odoc-pandoc-fixup.css" />
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -27,7 +28,7 @@
 <body>
 <div class="odoc-preamble">
 
-<h1 id="module-markup">Module <code>Markup</code></h1>
+<h1>Module <code>Markup</code></h1>
 <p>Here, we test the rendering of comment markup.</p>
 </div>
 
@@ -61,31 +62,27 @@
 </ul>
 <div class="odoc-content">
 
-<h2 id="sections"><a href="#sections" class="anchor"></a>Sections</h2>
+<h2><a href="#sections" class="anchor"></a>Sections</h2>
 <p>Let's get these done first, because sections will be used to break up
 the rest of this test.</p>
 <p>Besides the section heading above, there are also</p>
-<h3
-id="subsection-headings"><a href="#subsection-headings" class="anchor"></a>Subsection
+<h3><a href="#subsection-headings" class="anchor"></a>Subsection
 headings</h3>
 <p>and</p>
-<h4
-id="sub-subsection-headings"><a href="#sub-subsection-headings" class="anchor"></a>Sub-subsection
+<h4><a href="#sub-subsection-headings" class="anchor"></a>Sub-subsection
 headings</h4>
 <p>but odoc has banned deeper headings. There are also title headings,
 but they are only allowed in mld files.</p>
-<h4 id="anchors"><a href="#anchors" class="anchor"></a>Anchors</h4>
+<h4><a href="#anchors" class="anchor"></a>Anchors</h4>
 <p>Sections can have attached <a href="#anchors">Anchors</a>, and it is
 possible to <a href="#anchors">link</a> to them. Links to section
 headers should not be set in source code style.</p>
-<h5
-id="paragraph"><a href="#paragraph" class="anchor"></a>Paragraph</h5>
+<h5><a href="#paragraph" class="anchor"></a>Paragraph</h5>
 <p>Individual paragraphs can have a heading.</p>
-<h6 id="-subparagraph"><a href="#subparagraph" class="anchor"></a>
-Subparagraph</h6>
+<h6><a href="#subparagraph" class="anchor"></a> Subparagraph</h6>
 <p>Parts of a longer paragraph that can be considered alone can also
 have headings.</p>
-<h2 id="styling"><a href="#styling" class="anchor"></a>Styling</h2>
+<h2><a href="#styling" class="anchor"></a>Styling</h2>
 <p>This paragraph has some styled elements: <strong>bold</strong> and
 <em>italic</em> , <em><strong>bold italic</strong></em>,
 <em>emphasis</em>, <em><em>emphasis</em> within emphasis</em>,
@@ -108,9 +105,8 @@ this sentence, it was two space characters. And in this one, there is
 <em>and</em> <code>code</code>.</p>
 <p>Code can appear <strong>inside <code>other</code> markup</strong>.
 Its display shouldn't be affected.</p>
-<h2
-id="links-and-references"><a href="#links-and-references" class="anchor"></a>Links
-and references</h2>
+<h2><a href="#links-and-references" class="anchor"></a>Links and
+references</h2>
 <p>This is a <a href="#">link</a>. It sends you to the top of this page.
 Links can have markup inside them: <a href="#"><strong>bold</strong></a>
 , <a href="#"><em>italics</em></a>, <a href="#"><em>emphasis</em></a> ,
@@ -135,8 +131,7 @@ reference in a style: <strong><a
 href="#val-foo"><code>foo</code></a></strong> . References can't be
 nested inside references, and links and references can't be nested
 inside each other.</p>
-<h2
-id="preformatted-text"><a href="#preformatted-text" class="anchor"></a>Preformatted
+<h2><a href="#preformatted-text" class="anchor"></a>Preformatted
 text</h2>
 <p>This is a code block:</p>
 <pre><code>     let foo = ()
@@ -148,7 +143,7 @@ text</h2>
        ignore foo</code></pre>
 <p>There are also verbatim blocks:</p>
 <pre><code>The main difference is these don&#39;t get syntax highlighting.</code></pre>
-<h2 id="lists"><a href="#lists" class="anchor"></a>Lists</h2>
+<h2><a href="#lists" class="anchor"></a>Lists</h2>
 <ul>
 <li>This is a</li>
 <li>shorthand bulleted list,</li>
@@ -189,17 +184,17 @@ two paragraphs into a shorthand list item using a double line break</li>
 <li><a href="#val-foo"><code>foo</code></a></li>
 </ul></li>
 </ul>
-<h2 id="unicode"><a href="#unicode" class="anchor"></a>Unicode</h2>
+<h2><a href="#unicode" class="anchor"></a>Unicode</h2>
 <p>The parser supports any ASCII-compatible encoding, in particuλar
 UTF-8.</p>
-<h2 id="raw-html"><a href="#raw-html" class="anchor"></a>Raw HTML</h2>
+<h2><a href="#raw-html" class="anchor"></a>Raw HTML</h2>
 <p>Raw HTML can be as inline elements into sentences.</p>
 <blockquote>
 <p>If the raw HTML is the only thing in a paragraph, it is treated as a
 block element, and won't be wrapped in paragraph tags by the HTML
 generator.</p>
 </blockquote>
-<h2 id="math"><a href="#math" class="anchor"></a>Math</h2>
+<h2><a href="#math" class="anchor"></a>Math</h2>
 <p>Math elements can be inline: <code>m \int_{-\infty</code>^\infty</p>
 <p>}</p>
 <p>, or blocks:</p>
@@ -208,11 +203,10 @@ generator.</p>
 <p>\infty</p>
 <p>}</p>
 <p>^\infty \f\hat\xi\,e^</p>
-<h3 id="pi-i-xi-x"><a href="#\pi-i-\xi-x" class="anchor"></a>\pi i \xi
-x</h3>
+<h3><a href="#\pi-i-\xi-x" class="anchor"></a>\pi i \xi x</h3>
 <p>\,d\xi</p>
 <p>}</p>
-<h2 id="modules"><a href="#modules" class="anchor"></a>Modules</h2>
+<h2><a href="#modules" class="anchor"></a>Modules</h2>
 <ul>
 <li><a href="Markup-X.html"><code>X</code></a></li>
 </ul>
@@ -222,7 +216,7 @@ x</h3>
 <li><a href="Markup-X.html"><code>X</code></a></li>
 <li><a href="Markup-Y.html"><code>Y</code></a></li>
 </ul>
-<h2 id="tags"><a href="#tags" class="anchor"></a>Tags</h2>
+<h2><a href="#tags" class="anchor"></a>Tags</h2>
 <p>Each comment can end with zero or more tags. Here are some
 examples:</p>
 <ul>

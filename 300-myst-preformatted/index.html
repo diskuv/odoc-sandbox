@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>300-myst-preformatted</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" type='text/css' media='screen' href="../res/index/wing.min.css" />
+    <link rel="stylesheet" type='text/css' media='screen' href="../res/index/style.css" />
+</head>
+
+<body>
+    <div class="content">
+        <div class="nav">
+            <h5 class="nav-logo">odoc sandbox</h5>
+            <a class="nav-item" href="../index.html">Index of Experiments</a>
+        </div>
+        <div class="cards">
+            <div class="card">
+                <h5 class="card-header">Design</h5>
+                <div class="card-body">
+                    <p>We'll convert odoc HTML into <a href="https://github.github.com/gfm/">GitHub Flavored
+                            Markdown</a>
+                        (gfm), and then we'll format the Markdown, and then use
+                        <a href="https://myst-parser.readthedocs.io/en/latest/index.html">MyST</a> to render
+                        the Markdown into HTML.
+                    </p>
+
+                    <p>Basically: <code>Odoc.html mli |> Pandoc.gfm |> Mdformat.format |> MyST_docutils.html5</code></p>
+
+                    <a href="https://myst-parser.readthedocs.io/en/latest/index.html">MyST</a> has many features
+                    I (jonahbeckford@) would like to see in odoc. The pipeline in this experiment will let us:
+
+                    <ul>
+                        <li>put some new processing instructions (future additions to odoc!) into an .mli or .mld
+                            (probably in the code blocks)</li>
+                        <li>translate those new processing instructions into MyST (probably using sed or regex)</li>
+                        <li>see the result without having to modify odoc (just make an experiment that extends this one)
+                        </li>
+                    </ul>
+
+                    <p>The net effect is that the OCaml community gets to propose and see additions to odoc, and while
+                        the
+                        new feature may take years to implement, any early adopter can use the custom Dune rules from
+                        the
+                        experiment to adopt in their own projects. Early adoption will be complex but early adoption
+                        will
+                        also be
+                        future compatible.</p>
+
+                    <p>Q: Why format the generated Markdown with <code>mdformat</code>?</p>
+                    <p>ANS: The pandoc generated Markdown
+                        uses indented code rather than backticks for code blocks. Even with Markdown the backticks are
+                        better
+                        because you can specify the coding language for color formatting. For example:</p>
+                    <pre><code>```ocaml
+let () = print_endline "hi"
+```</code></pre>
+                    <p>MyST goes further and lets you place special instructions on those backticks. So by using
+                        <code>mdformat</code> we get three backticks for code blocks which we can
+                        easily extend with a bit of regex (ex. <code>sed</code>) to quickly implement whatever
+                        feature proposal we want for odoc.
+                    </p>
+                    <p>The only real disadvantage to <code>mdformat</code> is that it advertises it is for CommonMark
+                        Markdown. At some point if these experiments are useful someone should write a Markdown
+                        formatter (in OCaml?) that works with GitHub Flavored Markdown.</p>
+                </div>
+            </div>
+            <div class="card">
+                <h5 class="card-header">Results</h5>
+                <dl class="card-body">
+                    <dt><a href="html/Markup.html">markup.mli</a></dt>
+                    <dd>test the Experiment Design rendering of comment markup in a .mli file. Compare to the <a
+                            href="../100-plain/html/Markup.html">original (100-plain) rendering</a></dd>
+                </dl>
+            </div>
+            <div class="card">
+                <h5 class="card-header">Conclusion</h5>
+                <div class="card-body">
+                    <p>Using pandoc to produce Github Flavored Markdown, and then MyST to render back to HTML results in
+                        little loss of information.
+                        <strong>pandoc and MyST</strong> are a good temporary solution until
+                        <a href="https://github.com/ocaml/odoc/issues/709">Issue #709</a> is complete.
+                    </p>
+                    <p>The issues are identical to the <a href="../200-gfm-lossiness/index.html">GitHub Flavored
+                            Markdown experiment</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

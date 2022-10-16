@@ -24,7 +24,7 @@
                             href="https://docutils.sourceforge.io/docs/user/rst/quickstart.html">reStructuredText</a>
                         (rST), and then from rST back to HTML.</p>
 
-                    <p>Basically: <code>odoc.html | pandoc.rst | pandoc.html</code></p>
+                    <p>Basically: <code>Odoc.html mli |> Pandoc.rst |> Pandoc.html</code></p>
 
                     <p>Typically we may just stop at reStructuredText since reStructuredText
                         is the content format used by the (hugely) popular
@@ -59,7 +59,6 @@
                     <ol>
                         <li>The header level structure (ex. <code>{1 Section}</code> vs <code>{2 Subsection}</code>) is
                             lost</li>
-                        <li>The table of contents is inline rather than on the side</li>
                         <li>The implicit and explicit anchors for each title (ex. <code>{2 Subsection}</code>
                             appears in the reStructuredText results. They should be invisible.</li>
                         <li>Several types of links do not render as links</li>

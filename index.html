@@ -19,10 +19,38 @@
         <dl>
             <dt><a href="100-plain/index.html">100-plain</a></dt>
             <dd>odoc without any modifications</dd>
-            <dt><a href="200-markdown-lossiness/index.html">200-markdown-lossiness</a></dt>
-            <dd>lossiness through <code>odoc.html | pandoc.gfm | pandoc.html</code></dd>
+
+            <dt><a href="200-gfm-lossiness/index.html">200-gfm-lossiness</a></dt>
+            <dd>lossiness from GitHub Flavored Markdown with <code>Odoc.html mli |> Pandoc.gfm |> Pandoc.html</code>
+            </dd>
+
             <dt><a href="210-restructuredtext-lossiness/index.html">210-restructuredtext-lossiness</a></dt>
-            <dd>lossiness through <code>odoc.html | pandoc.rst | pandoc.html</code></dd>
+            <dd>lossiness from reStructuredText (used by Sphinx) with
+                <code>Odoc.html mli |> Pandoc.rst |> Pandoc.html</code>
+            </dd>
+
+            <dt><a href="220-commonmark-lossiness/index.html">220-commonmark-lossiness</a></dt>
+            <dd>lossiness from CommonMark Markdown with
+                <code>Odoc.html mli |> Pandoc.commonmark |> Pandoc.html</code>
+            </dd>
+
+            <dt><a href="300-myst-preformatted/index.html">300-myst-preformatted</a></dt>
+            <dd>rendering formatted Markdown through MyST Markdown with
+                <code>Odoc.html mli |> Pandoc.gfm </code>
+                <code>|> Mdformat.format |> MyST_docutils.html5</code>
+            </dd>
+
+            <dt><a href="400-codeblock/index.html">400-codeblock</a></dt>
+            <dd><strong>Proposed new feature</strong>: Odoc verbatim blocks
+                <pre><code>{v
+::code-block:: LANGUAGE
+
+source code
+v}</code></pre> with embedded code blocks. Simulated by
+                <code>Odoc.html mli |> Pandoc.gfm |> Mdformat.format</code>
+                <code>|> lift_code_block |> MyST_docutils.html5</code>
+            </dd>
+
         </dl>
     </div>
 </body>

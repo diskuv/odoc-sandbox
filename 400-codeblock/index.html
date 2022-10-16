@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>400-codeblock</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" type='text/css' media='screen' href="../res/index/wing.min.css" />
+    <link rel="stylesheet" type='text/css' media='screen' href="../res/index/style.css" />
+</head>
+
+<body>
+    <div class="content">
+        <div class="nav">
+            <h5 class="nav-logo">odoc sandbox</h5>
+            <a class="nav-item" href="../index.html">Index of Experiments</a>
+        </div>
+        <div class="cards">
+            <div class="card">
+                <h5 class="card-header">Design</h5>
+                <div class="card-body">
+                    <p>We'll convert odoc HTML into <a href="https://github.github.com/gfm/">GitHub Flavored
+                            Markdown</a>
+                        (gfm), then we'll format the Markdown, after which we'll lift Markdown code blocks
+                        containing <code>::code-block:: LANGUAGE</code> into
+                        <a
+                            href="https://myst-parser.readthedocs.io/en/latest/syntax/syntax.html#code-syntax-highlighting">Markdown
+                            fenced code blocks</a>,
+                        and then use <a href="https://myst-parser.readthedocs.io/en/latest/index.html">MyST</a> to
+                        render the Markdown into HTML.
+                    </p>
+
+                    <p>Basically:
+                        <code>Odoc.html mli |> Pandoc.gfm |> Mdformat.format</code>
+                        <code>|> lift_code_block |> MyST_docutils.html5</code>
+                    </p>
+
+                    <p>The proposal is to render Odoc verbatim blocks of the form
+                    <pre><code>{v
+::code-block:: LANGUAGE
+
+source code
+v}</code></pre> into syntax highlighted code blocks.</p>
+
+                    <p>The design choices in the proposal are:
+
+                    <ol>
+                        <li>Literate: Be understandable when the .mli file is read in a text editor</li>
+                        <li>Backwards-compatible: Not look like garbage if the feature is not available in an Odoc
+                            version
+                        </li>
+                    </ol>
+                    </p>
+
+                    <p>If the proposal is adopted, it may take quite a while before the proposal is implemented.
+                        In the meantime early adopters can use this experiment to adopt this feature into their
+                        own projects.
+                    </p>
+                </div>
+            </div>
+            <div class="card">
+                <h5 class="card-header">Results</h5>
+                <dl class="card-body">
+                    <dt><a href="html/Feature_codeblock.html">feature_codeblock.mli</a></dt>
+                    <dd>see the rendering of the .mli file</dd>
+                </dl>
+            </div>
+            <div class="card">
+                <h5 class="card-header">Conclusion</h5>
+                <div class="card-body">
+                    <p>Using pandoc to produce Github Flavored Markdown, and then MyST to render back to HTML results in
+                        little loss of information.
+                        <strong>pandoc and MyST</strong> are a good temporary solution until
+                        <a href="https://github.com/ocaml/odoc/issues/709">Issue #709</a> is complete.
+                    </p>
+                    <p>The issues are identical to the <a href="../200-gfm-lossiness/index.html">GitHub Flavored
+                            Markdown experiment</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
