@@ -1,3 +1,6 @@
 ; We really really really do not want the original content formatted!
 ; Formatting, accidentally or otherwise, can mess up the rendering.
 content/*.mli
+exp/content-highlighted/*.html
+
+exp/res/pygments/pygments.css
