@@ -52,7 +52,7 @@ let directive_to_string = function
 *)
 type codeblock_state =
   | Outside
-  | Start_backticks
+  | Start_backticks of { language_opt : string option }
   | Directive of { indent : int; directive : directive }
   | Codeblock of { dedent : int }
   | End_backticks
@@ -91,8 +91,10 @@ let visit_lines_with_codeblocks ?debug (lines : string list) :
     match (state, remaining_lines) with
     | _, [] -> acc
     | Outside, line :: rest when is_backticks line ->
-        helper Start_backticks rest ((Start_backticks, line) :: acc)
-    | Start_backticks, line :: rest when is_codeblock_directive line ->
+        let newstate = Start_backticks { language_opt = None } in
+        helper newstate rest ((newstate, line) :: acc)
+    | Start_backticks { language_opt = _ }, line :: rest
+      when is_codeblock_directive line ->
         let language = last_word line in
         let directive =
           Directive
@@ -102,13 +104,13 @@ let visit_lines_with_codeblocks ?debug (lines : string list) :
             }
         in
         helper directive rest ((directive, line) :: acc)
-    | ( ( Start_backticks
+    | ( ( Start_backticks { language_opt = _ }
         | Directive { indent = _; directive = _ }
         | Codeblock { dedent = _ } ),
         line :: rest )
       when is_backticks line ->
         helper End_backticks rest ((End_backticks, line) :: acc)
-    | Start_backticks, line :: rest ->
+    | Start_backticks { language_opt = _ }, line :: rest ->
         let codeblock = Codeblock { dedent = 0 } in
         helper codeblock rest ((codeblock, line) :: acc)
     | Directive { indent; directive = _ }, line :: rest ->
@@ -123,7 +125,7 @@ let visit_lines_with_codeblocks ?debug (lines : string list) :
 
 let prefix_of_state = function
   | Outside -> "[outside]      "
-  | Start_backticks -> "[start]        "
+  | Start_backticks { language_opt = _ } -> "[start]        "
   | Directive { indent; directive = _ } ->
       Printf.sprintf "[directive %2d] " indent
   | Codeblock { dedent } -> Printf.sprintf "[codeblock %2d] " dedent
@@ -131,7 +133,10 @@ let prefix_of_state = function
 
 let state_to_string = function
   | Outside -> "Outside"
-  | Start_backticks -> "Start_backticks"
+  | Start_backticks { language_opt } -> (
+      match language_opt with
+      | None -> "Start_backticks"
+      | Some language -> Printf.sprintf "Start_backticks(%s)" language)
   | Directive { indent; directive } ->
       Printf.sprintf "Directive(indent=%d, %s)" indent
         (directive_to_string directive)
@@ -142,3 +147,13 @@ let print_codeblock_lines lines_with_state =
   List.iter
     (fun (state, s) -> print_endline (prefix_of_state state ^ s))
     lines_with_state
+
+let lookahead lst =
+  let rec helper remaining previous_opt acc =
+    match (previous_opt, remaining) with
+    | Some previous, [] -> (previous, None) :: acc
+    | Some previous, hd :: tl -> helper tl (Some hd) ((previous, Some hd) :: acc)
+    | None, [] -> acc
+    | None, hd :: tl -> helper tl (Some hd) acc
+  in
+  List.rev (helper lst None [])

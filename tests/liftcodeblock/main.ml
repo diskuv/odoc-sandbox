@@ -10,26 +10,44 @@ let register ~title = Test.register ~__FILE__ ~tags ~title
 let () =
   register ~title:"GIVEN empty string WHEN last_word" @@ fun () ->
   Check.((Liftcodeblock.last_word "" = "") string)
-    ~error_msg:{|THEN = %R, got %L|};
+    ~error_msg:{|THEN = %R, but got %L|};
   unit
 
 let () =
   register ~title:"GIVEN one word WHEN last_word" @@ fun () ->
   Check.((Liftcodeblock.last_word "hello" = "hello") string)
-    ~error_msg:{|THEN = %R, got %L|};
+    ~error_msg:{|THEN = %R, but got %L|};
   unit
 
 let () =
   register ~title:"GIVEN two words WHEN last_word" @@ fun () ->
   Check.((Liftcodeblock.last_word "hello there" = "there") string)
-    ~error_msg:{|THEN = %R, got %L|};
+    ~error_msg:{|THEN = %R, but got %L|};
   unit
 
 let () =
   register ~title:"GIVEN two words with trailing spaces WHEN last_word"
   @@ fun () ->
   Check.((Liftcodeblock.last_word "hello there    " = "there") string)
-    ~error_msg:{|THEN = %R, got %L|};
+    ~error_msg:{|THEN = %R, but got %L|};
+  unit
+
+(* ------------------- lookahead ----------------------- *)
+
+let () =
+  register ~title:"GIVEN empty list WHEN lookahead" @@ fun () ->
+  Check.(
+    (Liftcodeblock.lookahead [] = []) (list (tuple2 string (option string))))
+    ~error_msg:{|THEN = %R, but got %L|};
+  unit
+
+let () =
+  register ~title:"GIVEN some list WHEN lookahead" @@ fun () ->
+  Check.(
+    (Liftcodeblock.lookahead [ "a"; "b"; "c"; "d" ]
+    = [ ("a", Some "b"); ("b", Some "c"); ("c", Some "d"); ("d", None) ])
+      (list (tuple2 string (option string))))
+    ~error_msg:{|THEN = %R, but got %L|};
   unit
 
 (* ----------------- contents_to_lines ----------------- *)
@@ -37,7 +55,7 @@ let () =
 let () =
   register ~title:"GIVEN empty string WHEN contents_to_lines" @@ fun () ->
   Check.((Liftcodeblock.contents_to_lines "" = []) (list string))
-    ~error_msg:{|THEN contents_to_lines "" = %R, got %L|};
+    ~error_msg:{|THEN contents_to_lines "" = %R, but got %L|};
   unit
 
 let () =
@@ -46,7 +64,7 @@ let () =
     (Liftcodeblock.contents_to_lines "hi\nthere\nworld\n"
     = [ "hi"; "there"; "world" ])
       (list string))
-    ~error_msg:{|THEN = %R, got %L|};
+    ~error_msg:{|THEN = %R, but got %L|};
   unit
 
 let () =
@@ -56,7 +74,7 @@ let () =
     (Liftcodeblock.contents_to_lines "hi\r\nthere\r\nworld\r\n"
     = [ "hi"; "there"; "world" ])
       (list string))
-    ~error_msg:{|THEN = %R, got %L|};
+    ~error_msg:{|THEN = %R, but got %L|};
   unit
 
 let () =
@@ -66,7 +84,7 @@ let () =
     (Liftcodeblock.contents_to_lines "hi\nthere\nworld"
     = [ "hi"; "there"; "world" ])
       (list string))
-    ~error_msg:{|THEN = %R, got %L|};
+    ~error_msg:{|THEN = %R, but got %L|};
   unit
 
 (* ----------------- visit_lines_with_codeblocks ----------------- *)
@@ -164,7 +182,7 @@ contents.
         "End_backticks ```";
       ])
       (list string))
-    ~error_msg:{|THEN = %R, got %L|};
+    ~error_msg:{|THEN = %R, but got %L|};
   unit
 
 (* --------------- run --------------- *)
