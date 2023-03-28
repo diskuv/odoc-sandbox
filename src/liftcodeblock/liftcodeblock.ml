@@ -1,37 +1,3 @@
-let input1 =
-  {|
-```
-::code-block:: python
-
-from a import b
-c = "string"
-```
-
-```
-::code-block:: console
-
-  $ echo "Hi"
-  # ls -lh
-  % ls -lh
-  > ls -lh
-```
-|}
-
-let output1 =
-  {|
-```python
-from a import b
-c = "string"
-```
-
-```console
-$ echo "Hi"
-# ls -lh
-% ls -lh
-> ls -lh
-```
-|}
-
 (** [contents_to_lines s] converts a string [s] with either DOS (CRLF) or Unix (LF)
     line terminators to a list of lines. The lines will not contain the CRLF or LF
     terminators. *)
@@ -112,16 +78,21 @@ let visit_lines_with_codeblocks ?debug (lines : string list) :
   let value = helper Outside lines [] in
   List.rev value
 
+let prefix_of_state = function
+  | Outside -> "[outside]   "
+  | Start_backticks -> "[start]     "
+  | Directive -> "[directive] "
+  | Codeblock -> "[codeblock] "
+  | End_backticks -> "[end]       "
+
+let state_to_string = function
+  | Outside -> "Outside"
+  | Start_backticks -> "Start_backticks"
+  | Directive -> "Directive"
+  | Codeblock -> "Codeblock"
+  | End_backticks -> "End_backticks"
+
 let print_codeblock_lines lines_with_state =
   List.iter
-    (fun (state, s) ->
-      let prefix =
-        match state with
-        | Outside -> "[outside]   "
-        | Start_backticks -> "[start]     "
-        | Directive -> "[directive] "
-        | Codeblock -> "[codeblock] "
-        | End_backticks -> "[end]       "
-      in
-      print_endline (prefix ^ s))
+    (fun (state, s) -> print_endline (prefix_of_state state ^ s))
     lines_with_state
