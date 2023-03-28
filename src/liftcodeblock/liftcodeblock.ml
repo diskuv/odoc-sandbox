@@ -23,15 +23,19 @@ let get_indent line =
     String.length line
   with IndentFound found_i -> found_i
 
-let dedent_line ~spaces s =
-  let indent = get_indent s in
-  if indent < spaces then
+let indent_line ~indent s =
+  let prefix = String.make indent ' ' in
+  prefix ^ s
+
+let dedent_line ~dedent s =
+  let existing_indent = get_indent s in
+  if existing_indent < dedent then
     (* The line is not sufficiently indented. We could error, or gracefully fix the problem.
        We choose to fix the problem by trimming all the spaces from the left. *)
-    String.sub s indent (String.length s - indent)
+    String.sub s existing_indent (String.length s - existing_indent)
   else
     (* Remove the first N spaces *)
-    String.sub s spaces (String.length s - spaces)
+    String.sub s dedent (String.length s - dedent)
 
 (** [contents_to_lines s] converts a string [s] with either DOS (CRLF) or Unix (LF)
     line terminators to a list of lines. The lines will not contain the CRLF or LF
@@ -89,7 +93,7 @@ let directive_to_string = function
 *)
 type codeblock_state =
   | Outside
-  | Start_backticks of { language_opt : string option }
+  | Start_backticks of { indent : int; language_opt : string option }
   | Directive of { indent : int; directive : directive }
   | Codeblock of { dedent : int }
   | End_backticks
@@ -105,10 +109,11 @@ let visit_lines_with_codeblocks ?debug (lines : string list) :
     match (state, remaining_lines) with
     | _, [] -> acc
     | Outside, line :: rest when is_backticks line ->
-        let newstate = Start_backticks { language_opt = None } in
+        let newstate =
+          Start_backticks { language_opt = None; indent = get_indent line }
+        in
         helper newstate rest ((newstate, line) :: acc)
-    | Start_backticks { language_opt = _ }, line :: rest
-      when is_codeblock_directive line ->
+    | Start_backticks _, line :: rest when is_codeblock_directive line ->
         let language = last_word line in
         let directive =
           Directive
@@ -118,13 +123,10 @@ let visit_lines_with_codeblocks ?debug (lines : string list) :
             }
         in
         helper directive rest ((directive, line) :: acc)
-    | ( ( Start_backticks { language_opt = _ }
-        | Directive { indent = _; directive = _ }
-        | Codeblock { dedent = _ } ),
-        line :: rest )
+    | (Start_backticks _ | Directive _ | Codeblock _), line :: rest
       when is_backticks line ->
         helper End_backticks rest ((End_backticks, line) :: acc)
-    | Start_backticks { language_opt = _ }, line :: rest ->
+    | Start_backticks _, line :: rest ->
         let codeblock = Codeblock { dedent = 0 } in
         helper codeblock rest ((codeblock, line) :: acc)
     | Directive { indent; directive = _ }, line :: rest ->
@@ -139,23 +141,31 @@ let visit_lines_with_codeblocks ?debug (lines : string list) :
 
 let prefix_of_state = function
   | Outside -> "[outside]      "
-  | Start_backticks { language_opt = _ } -> "[start]        "
-  | Directive { indent; directive = _ } ->
-      Printf.sprintf "[directive %2d] " indent
+  | Start_backticks _ -> "[start]        "
+  | Directive { indent; _ } -> Printf.sprintf "[directive %2d] " indent
   | Codeblock { dedent } -> Printf.sprintf "[codeblock %2d] " dedent
   | End_backticks -> "[end]          "
 
-let state_to_string = function
+let description_of_state = function
   | Outside -> "Outside"
-  | Start_backticks { language_opt } -> (
+  | Start_backticks { indent; language_opt } -> (
       match language_opt with
-      | None -> "Start_backticks"
-      | Some language -> Printf.sprintf "Start_backticks(%s)" language)
+      | None -> Printf.sprintf "Start_backticks(indent=%d)" indent
+      | Some language ->
+          Printf.sprintf "Start_backticks(indent=%d,%s)" indent language)
   | Directive { indent; directive } ->
       Printf.sprintf "Directive(indent=%d, %s)" indent
         (directive_to_string directive)
   | Codeblock { dedent } -> Printf.sprintf "Codeblock(dedent=%d)" dedent
   | End_backticks -> "End_backticks"
+
+let string_of_line_with_state = function
+  | Outside, line -> line
+  | Start_backticks { indent; language_opt }, _ -> (
+      match language_opt with
+      | None -> indent_line ~indent "```"
+      | Some language -> indent_line ~indent (Printf.sprintf "```%s" language))
+  | Directive _, line | Codeblock _, line | End_backticks, line -> line
 
 let print_codeblock_lines lines_with_state =
   List.iter
@@ -182,7 +192,7 @@ let normalize_codeblock_lines lines_with_state =
         ((codeblock_state * string) * (codeblock_state * string) option) list) =
     match line_and_maybe_next_lst with
     | [] -> acc
-    | ( (Start_backticks _, line),
+    | ( (Start_backticks { indent = indent_backticks; _ }, line),
         Some
           ( Directive
               { indent = _; directive = Directive_code_block { language } },
@@ -194,9 +204,13 @@ let normalize_codeblock_lines lines_with_state =
               ::code-block:: <language>
            to
               ```<language>
+           using the indentation of the original "```".
         *)
         let new_acc =
-          (Start_backticks { language_opt = Some language }, line) :: acc
+          ( Start_backticks
+              { indent = indent_backticks; language_opt = Some language },
+            line )
+          :: acc
         in
         helper new_acc Remove_directive_code_block tl
     | ((Directive { indent = _; directive = Directive_code_block _ }, _), _)
@@ -207,7 +221,7 @@ let normalize_codeblock_lines lines_with_state =
     | ((Codeblock { dedent }, line), _) :: tl ->
         (* DEDENT - de-indent the code block *)
         let new_acc =
-          (Codeblock { dedent = 0 }, dedent_line ~spaces:dedent line) :: acc
+          (Codeblock { dedent = 0 }, dedent_line ~dedent line) :: acc
         in
         helper new_acc Standard tl
     | (current, _) :: tl ->
@@ -216,3 +230,12 @@ let normalize_codeblock_lines lines_with_state =
         helper new_acc Standard tl
   in
   List.rev @@ helper [] Standard (lookahead lines_with_state)
+
+let lift s =
+  let lines =
+    normalize_codeblock_lines
+      (visit_lines_with_codeblocks (contents_to_lines s))
+  in
+  List.map string_of_line_with_state lines
+  |> List.map (fun s -> s ^ "\n")
+  |> String.concat ""

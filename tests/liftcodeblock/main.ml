@@ -92,7 +92,7 @@ let () =
 let stringify_lines_with_state :
     (Liftcodeblock.codeblock_state * string) list -> string list =
   List.map (fun (codeblock_state, line) ->
-      Liftcodeblock.state_to_string codeblock_state
+      Liftcodeblock.description_of_state codeblock_state
       ^ if String.equal "" line then "" else " " ^ line)
 
 let () =
@@ -146,7 +146,7 @@ contents.
     (stringify_lines_with_state ans
     = [
         "Outside";
-        "Start_backticks ```";
+        "Start_backticks(indent=0) ```";
         "Directive(indent=0, code-block(python)) ::code-block:: python";
         "Codeblock(dedent=0)";
         "Codeblock(dedent=0) from a import b";
@@ -159,7 +159,7 @@ contents.
         "Outside because the ::code-block:: python is aligned to the left";
         "Outside of the contents.";
         "Outside";
-        "Start_backticks ```";
+        "Start_backticks(indent=0) ```";
         "Directive(indent=0, code-block(console)) ::code-block:: console";
         "Codeblock(dedent=0)";
         "Codeblock(dedent=0)   $ echo \"Hi\"";
@@ -174,7 +174,7 @@ contents.
         "Outside because the ::code-block:: python is aligned with the";
         "Outside contents.";
         "Outside";
-        "Start_backticks ```";
+        "Start_backticks(indent=0) ```";
         "Directive(indent=2, code-block(python))   ::code-block:: python";
         "Codeblock(dedent=2)";
         "Codeblock(dedent=2)   from a import b";
@@ -223,13 +223,13 @@ c = "string"
     (stringify_lines_with_state (Liftcodeblock.normalize_codeblock_lines ans)
     = [
         "Outside";
-        "Start_backticks(python) ```";
+        "Start_backticks(indent=0,python) ```";
         "Codeblock(dedent=0)";
         "Codeblock(dedent=0) from a import b";
         "Codeblock(dedent=0) c = \"string\"";
         "End_backticks ```";
         "Outside";
-        "Start_backticks(console) ```";
+        "Start_backticks(indent=0,console) ```";
         "Codeblock(dedent=0)";
         "Codeblock(dedent=0)   $ echo \"Hi\"";
         "Codeblock(dedent=0)   # ls -lh";
@@ -237,13 +237,69 @@ c = "string"
         "Codeblock(dedent=0)   > ls -lh";
         "End_backticks ```";
         "Outside";
-        "Start_backticks(python) ```";
+        "Start_backticks(indent=0,python) ```";
         "Codeblock(dedent=0)";
         "Codeblock(dedent=0) from a import b";
         "Codeblock(dedent=0) c = \"string\"";
         "End_backticks ```";
       ])
       (list string))
+    ~error_msg:{|THEN = %R, but got %L|};
+  unit
+
+(* --------------- lift --------------- *)
+
+let () =
+  register ~title:"GIVEN code blocks WHEN lift" @@ fun () ->
+  Check.(
+    (Liftcodeblock.lift
+       {|
+```
+::code-block:: python
+
+from a import b
+c = "string"
+```
+
+```
+::code-block:: console
+
+  $ echo "Hi"
+  # ls -lh
+  % ls -lh
+  > ls -lh
+```
+
+```
+  ::code-block:: python
+
+  from a import b
+  c = "string"
+```
+|}
+    = {|
+```python
+
+from a import b
+c = "string"
+```
+
+```console
+
+  $ echo "Hi"
+  # ls -lh
+  % ls -lh
+  > ls -lh
+```
+
+```python
+
+from a import b
+c = "string"
+```
+|}
+    )
+      string)
     ~error_msg:{|THEN = %R, but got %L|};
   unit
 
