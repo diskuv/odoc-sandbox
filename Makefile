@@ -63,7 +63,7 @@ ide: $(IDE_ARTIFACTS)
 .PHONY: ide
 $(IDE_ARTIFACTS): $(SWITCH_ARTIFACTS) $(MSYS2_CLANG64_PREREQS)
 	export OPAMYES=1 OPAMSWITCH='$(OPAMSWITCH)' && \
-	opam install ocamlformat ocaml-lsp-server
+	opam install ocamlformat.0.24.1 ocaml-lsp-server
 	touch $@
 
 # ------------------------------ Assets -----------------------------
