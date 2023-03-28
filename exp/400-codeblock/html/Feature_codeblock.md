@@ -15,8 +15,8 @@ Here, we test the proposed code blocks.
 Here is some Python code:
 
 ```python
-        from a import b
-        c = "string"
+from a import b
+c = "string"
 ```
 
 and here is a shell session:
@@ -31,13 +31,13 @@ $ echo "Hi"
 We also have a regular odoc code block, which defaults to OCaml syntax:
 
 ```
-     let foo = ()
-     (** There are some nested comments in here, but an unpaired comment
-         terminator would terminate the whole doc surrounding comment. It's
-         best to keep code blocks no wider than 72 characters. *)
-     
-     let bar =
-       ignore foo
+let foo = ()
+(** There are some nested comments in here, but an unpaired comment
+    terminator would terminate the whole doc surrounding comment. It's
+    best to keep code blocks no wider than 72 characters. *)
+
+let bar =
+  ignore foo
 ```
 
 Make sure to **compare the original .mli** by pressing "View document

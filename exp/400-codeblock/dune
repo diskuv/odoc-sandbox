@@ -23,7 +23,6 @@
    (run
     odoc
     html-generate
-    --indent
     --flat
     --support-uri=../../res/odoc-theme
     --theme-uri=../../res/odoc-theme
