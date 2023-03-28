@@ -44,7 +44,7 @@ let contents_to_lines s : string list =
       | '\r' when s.[pos + 1] = '\n' && pos + 1 < String.length s ->
           helper (pos + 1) acc
       | '\n' ->
-          let line = String.of_bytes (Buffer.to_bytes buf) in
+          let line = Bytes.to_string (Buffer.to_bytes buf) in
           Buffer.clear buf;
           helper (pos + 1) (line :: acc)
       | c ->
@@ -53,7 +53,7 @@ let contents_to_lines s : string list =
   in
   let all_but_last_line = List.rev (helper 0 []) in
   if Buffer.length buf > 0 then
-    List.append all_but_last_line [ String.of_bytes (Buffer.to_bytes buf) ]
+    List.append all_but_last_line [ Bytes.to_string (Buffer.to_bytes buf) ]
   else all_but_last_line
 
 (** The type of the state of the codeblock processing.
@@ -82,12 +82,16 @@ type codeblock_state =
   | Codeblock
   | End_backticks
 
+let starts_with ~prefix s =
+  let ls = String.length s and lp = String.length prefix in
+  if lp > ls then false else String.equal prefix (String.sub s 0 lp)
+
 let visit_lines_with_codeblocks ?debug (lines : string list) :
     (codeblock_state * string) list =
   ignore debug;
   let is_backticks line = String.(equal (trim line) "```") in
   let is_codeblock_directive line =
-    String.(starts_with ~prefix:"::code-block::" (trim line))
+    starts_with ~prefix:"::code-block::" (String.trim line)
   in
   let rec helper state remaining_lines acc =
     match (state, remaining_lines) with
