@@ -53,7 +53,7 @@ $(PIN_ARTIFACTS): $(SWITCH_ARTIFACTS) $(MSYS2_CLANG64_PREREQS) Makefile
 OPAMPKGS_ARTIFACTS = _opam/bin/dune$(EXEEXT) _opam/bin/odoc$(EXEEXT)
 opam-packages: $(OPAMPKGS_ARTIFACTS)
 .PHONY: opam-packages
-$(OPAMPKGS_ARTIFACTS): opam $(SWITCH_ARTIFACTS) $(MSYS2_CLANG64_PREREQS)
+$(OPAMPKGS_ARTIFACTS): $(SWITCH_ARTIFACTS) $(MSYS2_CLANG64_PREREQS)
 	export OPAMYES=1 OPAMSWITCH='$(OPAMSWITCH)' && \
 	opam install ./opam --with-test --with-doc --deps-only
 	touch $@
@@ -90,7 +90,7 @@ exp/res/pygments/pygments.css:
 SERVER_PORT = 8000
 
 .PHONY: test
-test: $(DUNE_ARTIFACTS) $(OPAMPKGS_ARTIFACTS)
+test: $(OPAMPKGS_ARTIFACTS)
 	export OPAMYES=1 OPAMSWITCH='$(OPAMSWITCH)' && \
 	opam exec -- dune build --display=short @runtest @doc
 
