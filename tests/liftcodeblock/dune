@@ -1,0 +1,1 @@
+(test (name main) (libraries tezt liftcodeblock))

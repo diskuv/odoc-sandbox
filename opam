@@ -10,6 +10,7 @@ depends: [
   "dune" {>= "2.9"}
   "ocaml" {>= "4.12.1"}
   "diskuvbox" {>= "0.1.0"}
+  "tezt" {>= "2.0.0"}
   "odoc" {with-doc}
 ]
 build: [

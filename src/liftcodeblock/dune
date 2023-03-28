@@ -1,4 +1,2 @@
-(executable
- (name liftcodeblock)
- (libraries)
- (modules liftcodeblock))
+(library
+ (name liftcodeblock))

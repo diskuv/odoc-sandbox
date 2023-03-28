@@ -125,18 +125,3 @@ let print_codeblock_lines lines_with_state =
       in
       print_endline (prefix ^ s))
     lines_with_state
-
-(** {1 Poor man's test cases}
-    If these get numerous, use a real test apparatus like Alcotest *)
-
-let () = assert ([] = contents_to_lines "")
-
-let () =
-  assert ([ "hi"; "there"; "world" ] = contents_to_lines "hi\nthere\nworld\n")
-
-let () =
-  assert (
-    [ "hi"; "there"; "world" ] = contents_to_lines "hi\r\nthere\r\nworld\r\n")
-
-let () =
-  assert ([ "hi"; "there"; "world" ] = contents_to_lines "hi\nthere\nworld")
