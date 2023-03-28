@@ -68,6 +68,12 @@ from a import b
 c = "string"
 ```
 
+--------
+
+The contents of the following code block ARE indented
+because the ::code-block:: python is aligned to the left
+of the contents.
+
 ```
 ::code-block:: console
 
@@ -76,6 +82,19 @@ c = "string"
   % ls -lh
   > ls -lh
 ```
+
+--------
+
+The contents of the following code block are not indented
+because the ::code-block:: python is aligned with the
+contents.
+
+```
+  ::code-block:: python
+
+  from a import b
+  c = "string"
+```
 |})
   in
   Check.(
@@ -83,19 +102,38 @@ c = "string"
     = [
         "Outside";
         "Start_backticks ```";
-        "Directive ::code-block:: python";
-        "Codeblock";
-        "Codeblock from a import b";
-        "Codeblock c = \"string\"";
+        "Directive(indent=0) ::code-block:: python";
+        "Codeblock(dedent=0)";
+        "Codeblock(dedent=0) from a import b";
+        "Codeblock(dedent=0) c = \"string\"";
         "End_backticks ```";
         "Outside";
+        "Outside --------";
+        "Outside";
+        "Outside The contents of the following code block ARE indented";
+        "Outside because the ::code-block:: python is aligned to the left";
+        "Outside of the contents.";
+        "Outside";
         "Start_backticks ```";
-        "Directive ::code-block:: console";
-        "Codeblock";
-        "Codeblock   $ echo \"Hi\"";
-        "Codeblock   # ls -lh";
-        "Codeblock   % ls -lh";
-        "Codeblock   > ls -lh";
+        "Directive(indent=0) ::code-block:: console";
+        "Codeblock(dedent=0)";
+        "Codeblock(dedent=0)   $ echo \"Hi\"";
+        "Codeblock(dedent=0)   # ls -lh";
+        "Codeblock(dedent=0)   % ls -lh";
+        "Codeblock(dedent=0)   > ls -lh";
+        "End_backticks ```";
+        "Outside";
+        "Outside --------";
+        "Outside";
+        "Outside The contents of the following code block are not indented";
+        "Outside because the ::code-block:: python is aligned with the";
+        "Outside contents.";
+        "Outside";
+        "Start_backticks ```";
+        "Directive(indent=2)   ::code-block:: python";
+        "Codeblock(dedent=2)";
+        "Codeblock(dedent=2)   from a import b";
+        "Codeblock(dedent=2)   c = \"string\"";
         "End_backticks ```";
       ])
       (list string))

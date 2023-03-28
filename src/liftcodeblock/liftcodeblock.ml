@@ -44,13 +44,15 @@ let contents_to_lines s : string list =
 type codeblock_state =
   | Outside
   | Start_backticks
-  | Directive
-  | Codeblock
+  | Directive of { indent : int }
+  | Codeblock of { dedent : int }
   | End_backticks
 
 let starts_with ~prefix s =
   let ls = String.length s and lp = String.length prefix in
   if lp > ls then false else String.equal prefix (String.sub s 0 lp)
+
+exception IndentFound of int
 
 let visit_lines_with_codeblocks ?debug (lines : string list) :
     (codeblock_state * string) list =
@@ -59,18 +61,32 @@ let visit_lines_with_codeblocks ?debug (lines : string list) :
   let is_codeblock_directive line =
     starts_with ~prefix:"::code-block::" (String.trim line)
   in
+  let get_indent line =
+    try
+      for i = 0 to String.length line - 1 do
+        if line.[i] <> ' ' then raise (IndentFound i)
+      done;
+      String.length line
+    with IndentFound found_i -> found_i
+  in
   let rec helper state remaining_lines acc =
     match (state, remaining_lines) with
     | _, [] -> acc
     | Outside, line :: rest when is_backticks line ->
         helper Start_backticks rest ((Start_backticks, line) :: acc)
     | Start_backticks, line :: rest when is_codeblock_directive line ->
-        helper Directive rest ((Directive, line) :: acc)
-    | (Start_backticks | Directive | Codeblock), line :: rest
+        let directive = Directive { indent = get_indent line } in
+        helper directive rest ((directive, line) :: acc)
+    | ( (Start_backticks | Directive { indent = _ } | Codeblock { dedent = _ }),
+        line :: rest )
       when is_backticks line ->
         helper End_backticks rest ((End_backticks, line) :: acc)
-    | (Start_backticks | Directive), line :: rest ->
-        helper Codeblock rest ((Codeblock, line) :: acc)
+    | Start_backticks, line :: rest ->
+        let codeblock = Codeblock { dedent = 0 } in
+        helper codeblock rest ((codeblock, line) :: acc)
+    | Directive { indent }, line :: rest ->
+        let codeblock = Codeblock { dedent = indent } in
+        helper codeblock rest ((codeblock, line) :: acc)
     | End_backticks, line :: rest -> helper Outside rest ((Outside, line) :: acc)
     | previous_state, line :: rest ->
         helper previous_state rest ((previous_state, line) :: acc)
@@ -79,17 +95,17 @@ let visit_lines_with_codeblocks ?debug (lines : string list) :
   List.rev value
 
 let prefix_of_state = function
-  | Outside -> "[outside]   "
-  | Start_backticks -> "[start]     "
-  | Directive -> "[directive] "
-  | Codeblock -> "[codeblock] "
-  | End_backticks -> "[end]       "
+  | Outside -> "[outside]      "
+  | Start_backticks -> "[start]        "
+  | Directive { indent } -> Printf.sprintf "[directive %2d] " indent
+  | Codeblock { dedent } -> Printf.sprintf "[codeblock %2d] " dedent
+  | End_backticks -> "[end]          "
 
 let state_to_string = function
   | Outside -> "Outside"
   | Start_backticks -> "Start_backticks"
-  | Directive -> "Directive"
-  | Codeblock -> "Codeblock"
+  | Directive { indent } -> Printf.sprintf "Directive(indent=%d)" indent
+  | Codeblock { dedent } -> Printf.sprintf "Codeblock(dedent=%d)" dedent
   | End_backticks -> "End_backticks"
 
 let print_codeblock_lines lines_with_state =
