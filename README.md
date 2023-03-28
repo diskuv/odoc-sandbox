@@ -134,3 +134,21 @@ PS> &conda list -q -n odoc-sandbox | Out-Null
       &conda env update -f environment.yml
     }
 ```
+
+## Recommendations
+
+### direnv
+
+If you use direnv (Unix only), the `.envrc` below will help you avoid typing in
+`conda run -n odoc-sandbox` before every command.
+
+FIRST, do a `make` to ensure you have an opam switch.
+
+SECOND, write the following `.envrc` in the project directory (same directory as this README):
+
+```shell
+#!/bin/sh
+export OPAMROOT=$HOME/.config/opam
+#   shellcheck disable=SC2046
+eval $(conda run -n odoc-sandbox opam env --set-switch)
+```

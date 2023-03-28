@@ -97,4 +97,4 @@ test: $(OPAMPKGS_ARTIFACTS)
 .PHONY: server
 server: assets
 	echo "Starting web server on port $(SERVER_PORT). Change the port with the Makefile variable -D SERVER_PORT=xxx"
-	conda run -n odoc-sandbox python3 -m http.server $(SERVER_PORT) --directory exp
+	conda run -n odoc-sandbox --live-stream python3 -m http.server $(SERVER_PORT) --directory exp
