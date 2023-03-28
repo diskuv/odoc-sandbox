@@ -1,3 +1,38 @@
+(** {1 String Utilities} *)
+
+let starts_with ~prefix s =
+  let ls = String.length s and lp = String.length prefix in
+  if lp > ls then false else String.equal prefix (String.sub s 0 lp)
+
+let last_word s =
+  let s = String.trim s in
+  match String.rindex_opt s ' ' with
+  | None -> s
+  | Some i when i = String.length s - 1 ->
+      (* impossible b/c trimmed, but keep for safety of last match clause's String.sub *)
+      ""
+  | Some i -> String.sub s (i + 1) (String.length s - i - 1)
+
+exception IndentFound of int
+
+let get_indent line =
+  try
+    for i = 0 to String.length line - 1 do
+      if line.[i] <> ' ' then raise (IndentFound i)
+    done;
+    String.length line
+  with IndentFound found_i -> found_i
+
+let dedent_line ~spaces s =
+  let indent = get_indent s in
+  if indent < spaces then
+    (* The line is not sufficiently indented. We could error, or gracefully fix the problem.
+       We choose to fix the problem by trimming all the spaces from the left. *)
+    String.sub s indent (String.length s - indent)
+  else
+    (* Remove the first N spaces *)
+    String.sub s spaces (String.length s - spaces)
+
 (** [contents_to_lines s] converts a string [s] with either DOS (CRLF) or Unix (LF)
     line terminators to a list of lines. The lines will not contain the CRLF or LF
     terminators. *)
@@ -21,6 +56,8 @@ let contents_to_lines s : string list =
   if Buffer.length buf > 0 then
     List.append all_but_last_line [ Bytes.to_string (Buffer.to_bytes buf) ]
   else all_but_last_line
+
+(** {1 Operations} *)
 
 type directive =
   | Directive_code_block of { language : string }
@@ -57,35 +94,12 @@ type codeblock_state =
   | Codeblock of { dedent : int }
   | End_backticks
 
-let starts_with ~prefix s =
-  let ls = String.length s and lp = String.length prefix in
-  if lp > ls then false else String.equal prefix (String.sub s 0 lp)
-
-let last_word s =
-  let s = String.trim s in
-  match String.rindex_opt s ' ' with
-  | None -> s
-  | Some i when i = String.length s - 1 ->
-      (* impossible b/c trimmed, but keep for safety of last match clause's String.sub *)
-      ""
-  | Some i -> String.sub s (i + 1) (String.length s - i - 1)
-
-exception IndentFound of int
-
 let visit_lines_with_codeblocks ?debug (lines : string list) :
     (codeblock_state * string) list =
   ignore debug;
   let is_backticks line = String.(equal (trim line) "```") in
   let is_codeblock_directive line =
     starts_with ~prefix:"::code-block::" (String.trim line)
-  in
-  let get_indent line =
-    try
-      for i = 0 to String.length line - 1 do
-        if line.[i] <> ' ' then raise (IndentFound i)
-      done;
-      String.length line
-    with IndentFound found_i -> found_i
   in
   let rec helper state remaining_lines acc =
     match (state, remaining_lines) with
@@ -160,6 +174,8 @@ let lookahead lst =
 
 type normalize_phase = Standard | Remove_directive_code_block
 
+(** Lifts the code-block directive onto the backticks and performs
+    dedentation. *)
 let normalize_codeblock_lines lines_with_state =
   let rec helper acc phase
       (line_and_maybe_next_lst :
@@ -172,6 +188,13 @@ let normalize_codeblock_lines lines_with_state =
               { indent = _; directive = Directive_code_block { language } },
             _ ) )
       :: tl ->
+        (* LIFT
+           from
+              ```
+              ::code-block:: <language>
+           to
+              ```<language>
+        *)
         let new_acc =
           (Start_backticks { language_opt = Some language }, line) :: acc
         in
@@ -179,8 +202,16 @@ let normalize_codeblock_lines lines_with_state =
     | ((Directive { indent = _; directive = Directive_code_block _ }, _), _)
       :: tl
       when phase = Remove_directive_code_block ->
+        (* SQUELCH - Do not output ::code-block:: <language> if we just did a LIFT *)
         helper acc Standard tl
+    | ((Codeblock { dedent }, line), _) :: tl ->
+        (* DEDENT - de-indent the code block *)
+        let new_acc =
+          (Codeblock { dedent = 0 }, dedent_line ~spaces:dedent line) :: acc
+        in
+        helper new_acc Standard tl
     | (current, _) :: tl ->
+        (* Base case: Keep the line unmodified *)
         let new_acc = current :: acc in
         helper new_acc Standard tl
   in

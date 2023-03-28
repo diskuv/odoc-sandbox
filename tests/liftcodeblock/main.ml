@@ -238,9 +238,9 @@ c = "string"
         "End_backticks ```";
         "Outside";
         "Start_backticks(python) ```";
-        "Codeblock(dedent=2)";
-        "Codeblock(dedent=2)   from a import b";
-        "Codeblock(dedent=2)   c = \"string\"";
+        "Codeblock(dedent=0)";
+        "Codeblock(dedent=0) from a import b";
+        "Codeblock(dedent=0) c = \"string\"";
         "End_backticks ```";
       ])
       (list string))
