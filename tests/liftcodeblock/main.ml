@@ -5,6 +5,33 @@ let tags = []
 
 let register ~title = Test.register ~__FILE__ ~tags ~title
 
+(* ------------------- last_word ----------------------- *)
+
+let () =
+  register ~title:"GIVEN empty string WHEN last_word" @@ fun () ->
+  Check.((Liftcodeblock.last_word "" = "") string)
+    ~error_msg:{|THEN = %R, got %L|};
+  unit
+
+let () =
+  register ~title:"GIVEN one word WHEN last_word" @@ fun () ->
+  Check.((Liftcodeblock.last_word "hello" = "hello") string)
+    ~error_msg:{|THEN = %R, got %L|};
+  unit
+
+let () =
+  register ~title:"GIVEN two words WHEN last_word" @@ fun () ->
+  Check.((Liftcodeblock.last_word "hello there" = "there") string)
+    ~error_msg:{|THEN = %R, got %L|};
+  unit
+
+let () =
+  register ~title:"GIVEN two words with trailing spaces WHEN last_word"
+  @@ fun () ->
+  Check.((Liftcodeblock.last_word "hello there    " = "there") string)
+    ~error_msg:{|THEN = %R, got %L|};
+  unit
+
 (* ----------------- contents_to_lines ----------------- *)
 
 let () =
@@ -102,7 +129,7 @@ contents.
     = [
         "Outside";
         "Start_backticks ```";
-        "Directive(indent=0) ::code-block:: python";
+        "Directive(indent=0, code-block(python)) ::code-block:: python";
         "Codeblock(dedent=0)";
         "Codeblock(dedent=0) from a import b";
         "Codeblock(dedent=0) c = \"string\"";
@@ -115,7 +142,7 @@ contents.
         "Outside of the contents.";
         "Outside";
         "Start_backticks ```";
-        "Directive(indent=0) ::code-block:: console";
+        "Directive(indent=0, code-block(console)) ::code-block:: console";
         "Codeblock(dedent=0)";
         "Codeblock(dedent=0)   $ echo \"Hi\"";
         "Codeblock(dedent=0)   # ls -lh";
@@ -130,7 +157,7 @@ contents.
         "Outside contents.";
         "Outside";
         "Start_backticks ```";
-        "Directive(indent=2)   ::code-block:: python";
+        "Directive(indent=2, code-block(python))   ::code-block:: python";
         "Codeblock(dedent=2)";
         "Codeblock(dedent=2)   from a import b";
         "Codeblock(dedent=2)   c = \"string\"";
