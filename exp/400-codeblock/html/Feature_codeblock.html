@@ -1311,21 +1311,23 @@ pre.code .il { color: #dddddd } /* Literal.Number.Integer.Long */
 <section id="a-href-code-blocks-class-anchor-a-code-blocks">
 <h2><a id="code-blocks" class="anchor"></a>Code Blocks</h2>
 <p>Here is some Python code:</p>
-<pre class="code python literal-block"><code><span class="kn">from</span> <span class="nn">a</span> <span class="kn">import</span> <span class="n">b</span>
-<span class="n">c</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span></code></pre>
+<pre class="code python literal-block"><code>        
+        <span class="kn">from</span> <span class="nn">a</span> <span class="kn">import</span> <span class="n">b</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span></code></pre>
 <p>and here is a shell session:</p>
-<pre class="code console literal-block"><code><span class="gp">    $ </span><span class="nb">echo</span> <span class="s2">&quot;Hi&quot;</span>
-<span class="gp">    # </span>ls -lh
-<span class="gp">    % </span>ls -lh
-<span class="go">    &gt; ls -lh</span></code></pre>
+<pre class="code console literal-block"><code><span class="gp">$ </span><span class="nb">echo</span> <span class="s2">&quot;Hi&quot;</span>
+<span class="gp"># </span>ls -lh
+<span class="gp">% </span>ls -lh
+<span class="go">&gt; ls -lh</span></code></pre>
 <p>We also have a regular odoc code block, which defaults to OCaml syntax:</p>
-<pre class="code ocaml literal-block"><code><span class="k">let</span> <span class="n">foo</span> <span class="o">=</span> <span class="bp">()</span>
-<span class="c">(** There are some nested comments in here, but an unpaired comment
-    terminator would terminate the whole doc surrounding comment. It's
-    best to keep code blocks no wider than 72 characters. *)</span>
-
-<span class="k">let</span> <span class="n">bar</span> <span class="o">=</span>
-  <span class="n">ignore</span> <span class="n">foo</span></code></pre>
+<pre class="code literal-block"><code>     let foo = ()
+     (** There are some nested comments in here, but an unpaired comment
+         terminator would terminate the whole doc surrounding comment. It's
+         best to keep code blocks no wider than 72 characters. *)
+     
+     let bar =
+       ignore foo
+</code></pre>
 <p>Make sure to <strong>compare the original .mli</strong> by pressing &quot;View document
 source&quot; below if you see the syntax highlighted code above!</p>
 </div>

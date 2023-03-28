@@ -55,7 +55,7 @@ opam-packages: $(OPAMPKGS_ARTIFACTS)
 .PHONY: opam-packages
 $(OPAMPKGS_ARTIFACTS): $(SWITCH_ARTIFACTS) $(MSYS2_CLANG64_PREREQS)
 	export OPAMYES=1 OPAMSWITCH='$(OPAMSWITCH)' && \
-	opam install ./opam --with-test --with-doc --deps-only
+	opam install ./odoc-sandbox.opam --with-test --with-doc --deps-only
 	touch $@
 
 IDE_ARTIFACTS = _opam/bin/ocamlformat$(EXEEXT) _opam/bin/ocamlformat-rpc$(EXEEXT) _opam/bin/ocamllsp$(EXEEXT)
