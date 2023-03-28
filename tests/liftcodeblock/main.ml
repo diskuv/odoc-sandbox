@@ -185,10 +185,10 @@ contents.
     ~error_msg:{|THEN = %R, but got %L|};
   unit
 
-(* --------------- normalize_codeblock_lines --------------- *)
+(* --------------- normalize_codeblock_lines1 --------------- *)
 
 let () =
-  register ~title:"GIVEN code blocks WHEN normalize_codeblock_lines"
+  register ~title:"GIVEN code blocks WHEN normalize_codeblock_lines1"
   @@ fun () ->
   let ans =
     let open Liftcodeblock in
@@ -220,7 +220,7 @@ c = "string"
 |})
   in
   Check.(
-    (stringify_lines_with_state (Liftcodeblock.normalize_codeblock_lines ans)
+    (stringify_lines_with_state (Liftcodeblock.normalize_codeblock_lines1 ans)
     = [
         "Outside";
         "Start_backticks(indent=0,python) ```";
@@ -247,6 +247,73 @@ c = "string"
     ~error_msg:{|THEN = %R, but got %L|};
   unit
 
+(* -------- normalize_codeblock_lines1 + normalize_codeblock_lines2 -------- *)
+
+let () =
+  register
+    ~title:
+      "GIVEN code blocks WHEN normalize_codeblock_lines1 WHEN \
+       normalize_codeblock_lines2"
+  @@ fun () ->
+  let ans =
+    let open Liftcodeblock in
+    visit_lines_with_codeblocks
+      (contents_to_lines
+         {|
+```
+::code-block:: python
+
+
+
+
+from a import b
+c = "string"
+```
+
+```
+::code-block:: console
+
+  $ echo "Hi"
+  # ls -lh
+  % ls -lh
+  > ls -lh
+```
+
+```
+  ::code-block:: python
+
+  from a import b
+  c = "string"
+```
+|})
+  in
+  Check.(
+    (stringify_lines_with_state
+       (Liftcodeblock.normalize_codeblock_lines2
+          (Liftcodeblock.normalize_codeblock_lines1 ans))
+    = [
+        "Outside";
+        "Start_backticks(indent=0,python) ```";
+        "Codeblock(dedent=0) from a import b";
+        "Codeblock(dedent=0) c = \"string\"";
+        "End_backticks ```";
+        "Outside";
+        "Start_backticks(indent=0,console) ```";
+        "Codeblock(dedent=0)   $ echo \"Hi\"";
+        "Codeblock(dedent=0)   # ls -lh";
+        "Codeblock(dedent=0)   % ls -lh";
+        "Codeblock(dedent=0)   > ls -lh";
+        "End_backticks ```";
+        "Outside";
+        "Start_backticks(indent=0,python) ```";
+        "Codeblock(dedent=0) from a import b";
+        "Codeblock(dedent=0) c = \"string\"";
+        "End_backticks ```";
+      ])
+      (list string))
+    ~error_msg:{|THEN = %R, but got %L|};
+  unit
+
 (* --------------- lift --------------- *)
 
 let () =
@@ -256,6 +323,9 @@ let () =
        {|
 ```
 ::code-block:: python
+
+
+
 
 from a import b
 c = "string"
@@ -279,13 +349,11 @@ c = "string"
 |}
     = {|
 ```python
-
 from a import b
 c = "string"
 ```
 
 ```console
-
   $ echo "Hi"
   # ls -lh
   % ls -lh
@@ -293,7 +361,6 @@ c = "string"
 ```
 
 ```python
-
 from a import b
 c = "string"
 ```

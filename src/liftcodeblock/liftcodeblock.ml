@@ -167,11 +167,6 @@ let string_of_line_with_state = function
       | Some language -> indent_line ~indent (Printf.sprintf "```%s" language))
   | Directive _, line | Codeblock _, line | End_backticks, line -> line
 
-let print_codeblock_lines lines_with_state =
-  List.iter
-    (fun (state, s) -> print_endline (prefix_of_state state ^ s))
-    lines_with_state
-
 let lookahead lst =
   let rec helper remaining previous_opt acc =
     match (previous_opt, remaining) with
@@ -182,11 +177,13 @@ let lookahead lst =
   in
   List.rev (helper lst None [])
 
-type normalize_phase = Standard | Remove_directive_code_block
+type normalize_phase =
+  | Standard
+  | Remove_directive_code_block
+  | Remove_leading_blank_lines
 
-(** Lifts the code-block directive onto the backticks and performs
-    dedentation. *)
-let normalize_codeblock_lines lines_with_state =
+(** Perform the LIFT of ::code-block:: onto triple backquotes if needed *)
+let normalize_codeblock_lines1 lines_with_state =
   let rec helper acc phase
       (line_and_maybe_next_lst :
         ((codeblock_state * string) * (codeblock_state * string) option) list) =
@@ -216,10 +213,10 @@ let normalize_codeblock_lines lines_with_state =
     | ((Directive { indent = _; directive = Directive_code_block _ }, _), _)
       :: tl
       when phase = Remove_directive_code_block ->
-        (* SQUELCH - Do not output ::code-block:: <language> if we just did a LIFT *)
+        (* SQUELCH ::code-block:: <language> if we just did a LIFT *)
         helper acc Standard tl
     | ((Codeblock { dedent }, line), _) :: tl ->
-        (* DEDENT - de-indent the code block *)
+        (* DEDENT the code block *)
         let new_acc =
           (Codeblock { dedent = 0 }, dedent_line ~dedent line) :: acc
         in
@@ -230,6 +227,44 @@ let normalize_codeblock_lines lines_with_state =
         helper new_acc Standard tl
   in
   List.rev @@ helper [] Standard (lookahead lines_with_state)
+
+(** Removes a leading blank line if there are no directives in a code block *)
+let normalize_codeblock_lines2 lines_with_state =
+  let rec helper acc phase
+      (line_and_maybe_next_lst : (codeblock_state * string) list) =
+    match line_and_maybe_next_lst with
+    | [] -> acc
+    | ((Start_backticks _, _) as current) :: tl ->
+        (* REMOVE_LEADING_BLANK_LINES
+           from
+              ```<language>
+              {blank}
+           to
+              ```<language>
+        *)
+        let new_acc = current :: acc in
+        helper new_acc Remove_leading_blank_lines tl
+    | (Codeblock { dedent }, line) :: tl
+      when phase = Remove_leading_blank_lines
+           && String.equal "" (dedent_line ~dedent line) ->
+        (* SQUELCH line if we are still in REMOVE_LEADING_BLANK_LINES *)
+        helper acc Remove_leading_blank_lines tl
+    | current :: tl ->
+        (* Base case: Keep the line unmodified *)
+        let new_acc = current :: acc in
+        helper new_acc Standard tl
+  in
+  List.rev @@ helper [] Standard lines_with_state
+
+(** Lifts the code-block directive onto the backticks, performs
+    dedentation, and removes leading blank lines if there are no
+    directives. *)
+let normalize_codeblock_lines lines_with_state =
+  (* We normalize twice ... the first to perform the LIFT if needed (which deletes
+     a directive), and the second to SQUELCH leading blank lines in code blocks without
+     any directives.
+  *)
+  normalize_codeblock_lines2 (normalize_codeblock_lines1 lines_with_state)
 
 let lift s =
   let lines =
