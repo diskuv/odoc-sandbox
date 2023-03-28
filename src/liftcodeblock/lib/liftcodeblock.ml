@@ -228,21 +228,33 @@ let normalize_codeblock_lines1 lines_with_state =
   in
   List.rev @@ helper [] Standard (lookahead lines_with_state)
 
-(** Removes a leading blank line if there are no directives in a code block *)
+(** Removes a leading blank line if there are no directives in a code block,
+    and adds the ocaml language code to triple quotes if a language
+    has not already been lifted. *)
 let normalize_codeblock_lines2 lines_with_state =
   let rec helper acc phase
       (line_and_maybe_next_lst : (codeblock_state * string) list) =
     match line_and_maybe_next_lst with
     | [] -> acc
-    | ((Start_backticks _, _) as current) :: tl ->
+    | (Start_backticks { language_opt; indent }, line) :: tl ->
         (* REMOVE_LEADING_BLANK_LINES
            from
               ```<language>
               {blank}
            to
               ```<language>
+
+           and ADD_OCAML_LANGUAGE_IF_NO_LANGUAGE
+           from
+               ```
+           to
+               ```ocaml
         *)
-        let new_acc = current :: acc in
+        let new_language = Option.value ~default:"ocaml" language_opt in
+        let new_acc =
+          (Start_backticks { language_opt = Some new_language; indent }, line)
+          :: acc
+        in
         helper new_acc Remove_leading_blank_lines tl
     | (Codeblock _, line) :: tl
       when phase = Remove_leading_blank_lines

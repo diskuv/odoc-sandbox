@@ -1319,14 +1319,13 @@ pre.code .il { color: #dddddd } /* Literal.Number.Integer.Long */
 <span class="gp">% </span>ls -lh
 <span class="go">&gt; ls -lh</span></code></pre>
 <p>We also have a regular odoc code block, which defaults to OCaml syntax:</p>
-<pre class="code literal-block"><code>let foo = ()
-(** There are some nested comments in here, but an unpaired comment
+<pre class="code ocaml literal-block"><code><span class="k">let</span> <span class="n">foo</span> <span class="o">=</span> <span class="bp">()</span>
+<span class="c">(** There are some nested comments in here, but an unpaired comment
     terminator would terminate the whole doc surrounding comment. It's
-    best to keep code blocks no wider than 72 characters. *)
+    best to keep code blocks no wider than 72 characters. *)</span>
 
-let bar =
-  ignore foo
-</code></pre>
+<span class="k">let</span> <span class="n">bar</span> <span class="o">=</span>
+  <span class="n">ignore</span> <span class="n">foo</span></code></pre>
 <p>Make sure to <strong>compare the original .mli</strong> by pressing &quot;View document
 source&quot; below if you see the syntax highlighted code above!</p>
 </div>

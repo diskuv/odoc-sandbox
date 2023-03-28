@@ -30,7 +30,7 @@ $ echo "Hi"
 
 We also have a regular odoc code block, which defaults to OCaml syntax:
 
-```
+```ocaml
 let foo = ()
 (** There are some nested comments in here, but an unpaired comment
     terminator would terminate the whole doc surrounding comment. It's

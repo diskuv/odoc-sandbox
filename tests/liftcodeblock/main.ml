@@ -271,6 +271,10 @@ c = "string"
 ```
 
 ```
+let () = print_endline "This is OCaml"
+```
+
+```
 ::code-block:: console
 
   $ echo "Hi"
@@ -296,6 +300,10 @@ c = "string"
         "Start_backticks(indent=0,python) ```";
         "Codeblock(dedent=0) from a import b";
         "Codeblock(dedent=0) c = \"string\"";
+        "End_backticks ```";
+        "Outside";
+        "Start_backticks(indent=0,ocaml) ```";
+        "Codeblock(dedent=0) let () = print_endline \"This is OCaml\"";
         "End_backticks ```";
         "Outside";
         "Start_backticks(indent=0,console) ```";
@@ -332,6 +340,10 @@ c = "string"
 ```
 
 ```
+let () = print_endline "This is OCaml"
+```
+
+```
 ::code-block:: console
 
   $ echo "Hi"
@@ -351,6 +363,10 @@ c = "string"
 ```python
 from a import b
 c = "string"
+```
+
+```ocaml
+let () = print_endline "This is OCaml"
 ```
 
 ```console
