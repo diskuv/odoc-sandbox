@@ -1,0 +1,3 @@
+(executable
+ (name lift_code_block)
+ (libraries liftcodeblock))
