@@ -26,18 +26,18 @@ endif
 # --------------------------- Opam switch ---------------------------
 
 #       [important packages]
-#               ocaml.4.12.1: So works with Diskuv OCaml 1.0.0 on Windows
+#               ocaml.4.14.0: So works with Diskuv OCaml 1.2.0 on Windows
 #       [packages that must be pinned as well to propagate into Opam Monorepo .locked files]
-#               dune.2.9.3: So works with Diskuv OCaml 1.0.0 on Windows
-VERSION_OCAML = 4.12.1
-VERSION_DUNE = 2.9.3
+#               dune.3.6.2+shim: So works with Diskuv OCaml 1.2.0 on Windows
+VERSION_OCAML = 4.14.0
+VERSION_DUNE = 3.6.2+shim
 
 SWITCH_ARTIFACTS = _opam/.opam-switch/switch-config
 switch: $(SWITCH_ARTIFACTS)
 .PHONY: switch
 $(SWITCH_ARTIFACTS):
 	export OPAMYES=1 && if [ -x "$$(opam var root)/plugins/bin/opam-dkml" ]; then \
-		opam dkml init ; \
+		dkml init ; \
 	else \
 		opam switch create . --formula '["ocaml" {= "$(VERSION_OCAML)"} "dune" {= "$(VERSION_DUNE)"}]' --no-install; \
 	fi
@@ -63,7 +63,7 @@ ide: $(IDE_ARTIFACTS)
 .PHONY: ide
 $(IDE_ARTIFACTS): $(SWITCH_ARTIFACTS) $(MSYS2_CLANG64_PREREQS)
 	export OPAMYES=1 OPAMSWITCH='$(OPAMSWITCH)' && \
-	opam install ocamlformat.0.19.0 ocamlformat-rpc.0.19.0 ocaml-lsp-server
+	opam install ocamlformat ocaml-lsp-server
 	touch $@
 
 # ------------------------------ Assets -----------------------------
