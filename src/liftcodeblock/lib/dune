@@ -1,2 +1,3 @@
 (library
- (name liftcodeblock))
+ (name liftcodeblock)
+ (public_name odoc-sandbox.liftcodeblock))
