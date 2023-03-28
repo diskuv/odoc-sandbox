@@ -157,3 +157,31 @@ let lookahead lst =
     | None, hd :: tl -> helper tl (Some hd) acc
   in
   List.rev (helper lst None [])
+
+type normalize_phase = Standard | Remove_directive_code_block
+
+let normalize_codeblock_lines lines_with_state =
+  let rec helper acc phase
+      (line_and_maybe_next_lst :
+        ((codeblock_state * string) * (codeblock_state * string) option) list) =
+    match line_and_maybe_next_lst with
+    | [] -> acc
+    | ( (Start_backticks _, line),
+        Some
+          ( Directive
+              { indent = _; directive = Directive_code_block { language } },
+            _ ) )
+      :: tl ->
+        let new_acc =
+          (Start_backticks { language_opt = Some language }, line) :: acc
+        in
+        helper new_acc Remove_directive_code_block tl
+    | ((Directive { indent = _; directive = Directive_code_block _ }, _), _)
+      :: tl
+      when phase = Remove_directive_code_block ->
+        helper acc Standard tl
+    | (current, _) :: tl ->
+        let new_acc = current :: acc in
+        helper new_acc Standard tl
+  in
+  List.rev @@ helper [] Standard (lookahead lines_with_state)

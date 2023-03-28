@@ -185,6 +185,68 @@ contents.
     ~error_msg:{|THEN = %R, but got %L|};
   unit
 
+(* --------------- normalize_codeblock_lines --------------- *)
+
+let () =
+  register ~title:"GIVEN code blocks WHEN normalize_codeblock_lines"
+  @@ fun () ->
+  let ans =
+    let open Liftcodeblock in
+    visit_lines_with_codeblocks
+      (contents_to_lines
+         {|
+```
+::code-block:: python
+
+from a import b
+c = "string"
+```
+
+```
+::code-block:: console
+
+  $ echo "Hi"
+  # ls -lh
+  % ls -lh
+  > ls -lh
+```
+
+```
+  ::code-block:: python
+
+  from a import b
+  c = "string"
+```
+|})
+  in
+  Check.(
+    (stringify_lines_with_state (Liftcodeblock.normalize_codeblock_lines ans)
+    = [
+        "Outside";
+        "Start_backticks(python) ```";
+        "Codeblock(dedent=0)";
+        "Codeblock(dedent=0) from a import b";
+        "Codeblock(dedent=0) c = \"string\"";
+        "End_backticks ```";
+        "Outside";
+        "Start_backticks(console) ```";
+        "Codeblock(dedent=0)";
+        "Codeblock(dedent=0)   $ echo \"Hi\"";
+        "Codeblock(dedent=0)   # ls -lh";
+        "Codeblock(dedent=0)   % ls -lh";
+        "Codeblock(dedent=0)   > ls -lh";
+        "End_backticks ```";
+        "Outside";
+        "Start_backticks(python) ```";
+        "Codeblock(dedent=2)";
+        "Codeblock(dedent=2)   from a import b";
+        "Codeblock(dedent=2)   c = \"string\"";
+        "End_backticks ```";
+      ])
+      (list string))
+    ~error_msg:{|THEN = %R, but got %L|};
+  unit
+
 (* --------------- run --------------- *)
 
 let () = Test.run ()
