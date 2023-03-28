@@ -15,7 +15,6 @@ Here, we test the proposed code blocks.
 Here is some Python code:
 
 ```python
-        
         from a import b
         c = "string"
 ```

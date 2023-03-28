@@ -244,9 +244,9 @@ let normalize_codeblock_lines2 lines_with_state =
         *)
         let new_acc = current :: acc in
         helper new_acc Remove_leading_blank_lines tl
-    | (Codeblock { dedent }, line) :: tl
+    | (Codeblock _, line) :: tl
       when phase = Remove_leading_blank_lines
-           && String.equal "" (dedent_line ~dedent line) ->
+           && String.equal "" (String.trim line) ->
         (* SQUELCH line if we are still in REMOVE_LEADING_BLANK_LINES *)
         helper acc Remove_leading_blank_lines tl
     | current :: tl ->
