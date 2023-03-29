@@ -46,6 +46,7 @@ PIN_ARTIFACTS = _opam/.pin.depends
 pins: $(PIN_ARTIFACTS)
 $(PIN_ARTIFACTS): $(SWITCH_ARTIFACTS) $(MSYS2_CLANG64_PREREQS) Makefile
 	export OPAMYES=1 OPAMSWITCH='$(OPAMSWITCH)' && \
+	opam pin tezt git+https://gitlab.com/nomadic-labs/tezt.git#3.0.0 --no-action && \
 	opam pin dune -k version $(VERSION_DUNE) --no-action && \
 	touch $@
 
