@@ -7,11 +7,12 @@ license: "Apache-2.0"
 homepage: "https://github.com/diskuv/odoc-sandbox#readme"
 bug-reports: "https://github.com/diskuv/odoc-sandbox/issues"
 depends: [
-  "dune" {>= "2.9"}
-  "ocaml" {>= "4.12.1"}
+  "dune" {>= "3.6.2"}
+  "ocaml" {>= "4.14.0"}
   "diskuvbox" {>= "0.1.0"}
   "tezt" {>= "2.0.0"}
-  "odoc" {with-doc}
+  # Significant HTML changes from odoc.2.1 to odoc.2.2. Lock the version.
+  "odoc" {= "2.2.0" & with-doc}
 ]
 build: [
   ["dune" "subst"] {dev}
@@ -30,3 +31,9 @@ build: [
   ["dune" "install" "-p" name "--create-install-files" name]
 ]
 dev-repo: "git+https://github.com/diskuv/odoc-sandbox.git"
+pin-depends: [
+  [
+    "tezt.3.0.0"
+    "git+https://gitlab.com/nomadic-labs/tezt.git#3.0.0"
+  ]
+]
