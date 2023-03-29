@@ -19,7 +19,6 @@ Here, we test the rendering of comment markup.
 - [Unicode](#unicode)
 - [Raw HTML](#raw-html)
 - [Math](#math)
-  - [\pi i \xi x](#\pi-i-\xi-x)
 - [Modules](#modules)
 - [Tags](#tags)
 
@@ -104,16 +103,18 @@ references, and links and references can't be nested inside each other.
 
 This is a code block:
 
-        
-         let foo = ()
-         (** There are some nested comments in here, but an unpaired comment
-             terminator would terminate the whole doc surrounding comment. It's
-             best to keep code blocks no wider than 72 characters. *)
-         
-         let bar =
-           ignore foo
-        
-       
+``` language-ocaml
+    
+     let foo = ()
+     (** There are some nested comments in here, but an unpaired comment
+         terminator would terminate the whole doc surrounding comment. It's
+         best to keep code blocks no wider than 72 characters. *)
+     
+     let bar =
+       ignore foo
+    
+   
+```
 
 There are also verbatim blocks:
 
@@ -168,26 +169,21 @@ Raw HTML can be as inline elements into sentences.
 
 ## <a href="#math" class="anchor"></a>Math
 
-Math elements can be inline: `m \int_{-\infty`^\infty
+Math elements can be inline: `\int_{-\infty}^\infty`, or blocks:
 
-}
+<div>
 
-, or blocks:
+``` odoc-katex-math
+         % \f is defined as #1f(#2) using the macro
+         \newcommand{\f}[2]{#1f(#2)}
+         \f\relax{x} = \int_{-\infty}^\infty
+         \f\hat\xi\,e^{2 \pi i \xi x}
+         \,d\xi
+         
+    
+```
 
-` math % \f is defined as #1f(#2) using the macro \newcommand{\f ``2``#1f(#2)`
-\f\relax`x` = \int\_
-
-\infty
-
-}
-
-^\infty \f\hat\xi\\,e^
-
-### <a href="#\pi-i-\xi-x" class="anchor"></a>\pi i \xi x
-
-\\,d\xi
-
-}
+</div>
 
 ## <a href="#modules" class="anchor"></a>Modules
 
@@ -262,7 +258,7 @@ Each comment can end with zero or more tags. Here are some examples:
 
 <div class="odoc-spec">
 
-<div id="val-foo" class="anchored">
+<div id="val-foo" class="spec value anchored">
 
 <a href="#val-foo" class="anchor"></a> <span
 class="keyword">`val`</span>` foo : unit`
@@ -282,7 +278,7 @@ Some modules to support references.
 
 <div class="odoc-spec">
 
-<div id="module-X" class="anchored">
+<div id="module-X" class="spec module anchored">
 
 <a href="#module-X" class="anchor"></a> ` `<span
 class="keyword">`module`</span>` `[`X`](Markup-X.html)` `` `` : `<span
@@ -295,7 +291,7 @@ class="keyword">`end`</span>` `` `
 
 <div class="odoc-spec">
 
-<div id="module-Y" class="anchored">
+<div id="module-Y" class="spec module anchored">
 
 <a href="#module-Y" class="anchor"></a> ` `<span
 class="keyword">`module`</span>` `[`Y`](Markup-Y.html)` `` `` : `<span

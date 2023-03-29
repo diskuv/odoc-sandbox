@@ -290,7 +290,7 @@ p img, p video, figure img, figure video {
 @charset "UTF-8";
 /* Copyright (c) 2016 The odoc contributors. All rights reserved.
    Distributed under the ISC license, see terms at the end of the file.
-   odoc 2.1.1 */
+   odoc 2.2.0 */
 
 /* Fonts */
 @import url('https://fonts.googleapis.com/css?family=Fira+Mono:400,500');
@@ -708,8 +708,8 @@ pre code {
   padding: 0.35em 0.5em;
 }
 
-.def-doc {
-  margin-bottom: 10px;
+li:not(:last-child) > .def-doc {
+  margin-bottom: 15px;
 }
 
 /* Spacing between items */
@@ -717,30 +717,41 @@ div.odoc-spec,.odoc-include {
   margin-bottom: 2em;
 }
 
-.spec.type .variant {
+.spec.type .variant p, .spec.type .record p {
+  margin: 5px;
+}
+
+.spec.type .variant, .spec.type .record {
   margin-left: 2ch;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 4px;
 }
-.spec.type .variant p {
-  margin: 0;
-  font-style: italic;
+
+.spec.type .record > code, .spec.type .variant > code {
+  min-width: 40%;
 }
-.spec.type .record {
-  margin-left: 2ch;
+
+.spec.type > ol {
+  margin-top: 0;
+  margin-bottom: 0;
 }
-.spec.type .record p {
-  margin: 0;
-  font-style: italic;
+
+.spec.type .record > .def-doc, .spec.type .variant > .def-doc {
+  min-width:50%;
+  padding: 0.25em 0.5em;
+  margin-left: 10%;
+  border-radius: 3px;
+  flex-grow:1;
+  background: var(--main-background);
+  box-shadow: 2px 2px 4px lightgrey;
 }
 
 div.def {
   margin-top: 0;
   text-indent: -2ex;
   padding-left: 2ex;
-}
-
-div.def+div.def-doc {
-  margin-left: 1ex;
-  margin-top: 2.5px
 }
 
 div.def-doc>*:first-child {
@@ -955,9 +966,8 @@ td.def-doc *:first-child {
 /* Mobile adjustements. */
 
 @media only screen and (max-width: 95ex) {
-  .odoc-content {
-    margin: auto;
-    padding: 2em;
+  body.odoc {
+    margin: 2em;
   }
   .odoc-toc {
     position: static;
@@ -967,6 +977,7 @@ td.def-doc *:first-child {
     border: none;
     padding: 0.2em 1em;
     border-radius: 5px;
+    margin-bottom: 2em;
   }
 }
 
@@ -1242,11 +1253,7 @@ body>main>ul/*.odoc-toc ul*/ li li {
 <li><p><a class="reference external" href="#lists">Lists</a></p></li>
 <li><p><a class="reference external" href="#unicode">Unicode</a></p></li>
 <li><p><a class="reference external" href="#raw-html">Raw HTML</a></p></li>
-<li><p><a class="reference external" href="#math">Math</a></p>
-<ul>
-<li><p><a class="reference external" href="#%5Cpi-i-%5Cxi-x">\pi i \xi x</a></p></li>
-</ul>
-</li>
+<li><p><a class="reference external" href="#math">Math</a></p></li>
 <li><p><a class="reference external" href="#modules">Modules</a></p></li>
 <li><p><a class="reference external" href="#tags">Tags</a></p></li>
 </ul>
@@ -1322,13 +1329,16 @@ references, and links and references can't be nested inside each other.</p>
 <section id="a-href-preformatted-text-class-anchor-a-preformatted-text">
 <h2><a id="preformatted-text" class="anchor"></a>Preformatted text</h2>
 <p>This is a code block:</p>
-<pre class="code literal-block"><code>     let foo = ()
+<pre class="code literal-block" lang="ocaml"><code>    
+     let foo = ()
      (** There are some nested comments in here, but an unpaired comment
          terminator would terminate the whole doc surrounding comment. It's
          best to keep code blocks no wider than 72 characters. *)
      
      let bar =
        ignore foo
+    
+   
 </code></pre>
 <p>There are also verbatim blocks:</p>
 <pre class="code literal-block"><code>The main difference is these don't get syntax highlighting.
@@ -1392,19 +1402,17 @@ generator.</p>
 </section>
 <section id="a-href-math-class-anchor-a-math">
 <h2><a id="math" class="anchor"></a>Math</h2>
-<p>Math elements can be inline: <span class="docutils literal">m <span class="pre">\int_{-\infty</span></span>^\infty</p>
-<p>}</p>
-<p>, or blocks:</p>
-<p><span class="docutils literal"> math % \f is defined as <span class="pre">#1f(#2)</span> using the macro <span class="pre">\newcommand{\f</span> <span class="pre">``2``#1f(#2)</span></span>
-\f\relax<span class="docutils literal">x</span> = \int_</p>
-<p>\infty</p>
-<p>}</p>
-<p>^\infty \f\hat\xi\,e^</p>
-<section id="a-href-pi-i-xi-x-class-anchor-a-pi-i-xi-x">
-<h3><a id="\pi-i-\xi-x" class="anchor"></a>\pi i \xi x</h3>
-<p>\,d\xi</p>
-<p>}</p>
-</section>
+<p>Math elements can be inline: <span class="docutils literal"><span class="pre">\int_{-\infty}^\infty</span></span>, or blocks:</p>
+<div>
+<pre class="code odoc-katex-math literal-block"><code>         % \f is defined as #1f(#2) using the macro
+         \newcommand{\f}[2]{#1f(#2)}
+         \f\relax{x} = \int_{-\infty}^\infty
+         \f\hat\xi\,e^{2 \pi i \xi x}
+         \,d\xi
+         
+    
+</code></pre>
+</div>
 </section>
 <section id="a-href-modules-class-anchor-a-modules">
 <h2><a id="modules" class="anchor"></a>Modules</h2>
@@ -1480,7 +1488,7 @@ generator.</p>
 <li><p><span class="at-tag">version</span> -1</p></li>
 </ul>
 <div class="odoc-spec">
-<div id="val-foo" class="anchored">
+<div id="val-foo" class="spec value anchored">
 <p><a id="val-foo" class="anchor"></a> <span
 class="keyword"><span class="docutils literal">val</span></span><span class="docutils literal"> foo : unit</span></p>
 </div>
@@ -1491,7 +1499,7 @@ class="keyword"><span class="docutils literal">val</span></span><span class="doc
 </div>
 <p>Some modules to support references.</p>
 <div class="odoc-spec">
-<div id="module-X" class="anchored">
+<div id="module-X" class="spec module anchored">
 <p><a id="module-X" class="anchor"></a> <span class="docutils literal"> </span><span
 class="keyword"><span class="docutils literal">module</span></span><span class="docutils literal"> </span><a class="reference external" href="Markup-X.html"><span class="docutils literal">X</span></a><span class="docutils literal">`` `` :</span><span
 class="keyword"><span class="docutils literal">sig</span></span><span class="docutils literal">...</span><span
@@ -1499,7 +1507,7 @@ class="keyword"><span class="docutils literal">end</span></span><span class="doc
 </div>
 </div>
 <div class="odoc-spec">
-<div id="module-Y" class="anchored">
+<div id="module-Y" class="spec module anchored">
 <p><a id="module-Y" class="anchor"></a> <span class="docutils literal"> </span><span
 class="keyword"><span class="docutils literal">module</span></span><span class="docutils literal"> </span><a class="reference external" href="Markup-Y.html"><span class="docutils literal">Y</span></a><span class="docutils literal">`` `` :</span><span
 class="keyword"><span class="docutils literal">sig</span></span><span class="docutils literal">...</span><span

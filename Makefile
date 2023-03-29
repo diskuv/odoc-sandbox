@@ -27,10 +27,12 @@ endif
 
 #       [important packages]
 #               ocaml.4.14.0: So works with Diskuv OCaml 1.2.0 on Windows
+#               odoc.2.2.0: Significant HTML changes from odoc.2.1 to odoc.2.2
 #       [packages that must be pinned as well to propagate into Opam Monorepo .locked files]
 #               dune.3.6.2+shim: So works with Diskuv OCaml 1.2.0 on Windows
 VERSION_OCAML = 4.14.0
 VERSION_DUNE = 3.6.2+shim
+VERSION_ODOC = 2.2.0
 
 SWITCH_ARTIFACTS = _opam/.opam-switch/switch-config
 switch: $(SWITCH_ARTIFACTS)
@@ -46,6 +48,7 @@ PIN_ARTIFACTS = _opam/.pin.depends
 pins: $(PIN_ARTIFACTS)
 $(PIN_ARTIFACTS): $(SWITCH_ARTIFACTS) $(MSYS2_CLANG64_PREREQS) Makefile
 	export OPAMYES=1 OPAMSWITCH='$(OPAMSWITCH)' && \
+	opam pin odoc -k version $(VERSION_ODOC) --no-action && \
 	opam pin tezt git+https://gitlab.com/nomadic-labs/tezt.git#3.0.0 --no-action && \
 	opam pin dune -k version $(VERSION_DUNE) --no-action && \
 	touch $@
@@ -72,10 +75,12 @@ $(IDE_ARTIFACTS): $(SWITCH_ARTIFACTS) $(MSYS2_CLANG64_PREREQS)
 .PHONY: assets
 assets: exp/res/odoc-theme/highlight.pack.js exp/res/odoc-theme/odoc.css exp/res/pygments/pygments.css
 
+# As of odoc 2.2.0 finding highlight.pack.js is brittle (relies on the opam switch sources/).
+# Before that, it was in odoc's share/ folder which was reliable.
 exp/res/odoc-theme/highlight.pack.js: $(OPAMPKGS_ARTIFACTS)
 	export OPAMYES=1 OPAMSWITCH='$(OPAMSWITCH)' && \
-	ODOC_SHARE=$$(opam var odoc:share) && \
-	opam exec -- diskuvbox copy-file "$$ODOC_SHARE/odoc-theme/default/highlight.pack.js" $@
+	PREFIX=$$(opam var prefix) && \
+	opam exec -- diskuvbox copy-file "$$PREFIX/.opam-switch/sources/odoc.$(VERSION_ODOC)/src/html_support_files/highlight.pack.js" $@
 
 exp/res/odoc-theme/odoc.css: $(OPAMPKGS_ARTIFACTS)
 	export OPAMYES=1 OPAMSWITCH='$(OPAMSWITCH)' && \

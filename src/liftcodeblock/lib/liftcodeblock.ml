@@ -98,19 +98,46 @@ type codeblock_state =
   | Codeblock of { dedent : int }
   | End_backticks
 
+type backticks =
+  | Not_backticks
+  | Backticks_token of { language_opt : string option }
+
+(** From ["```language-ocaml"] to [Backticks { language_opt = "ocaml" }]  *)
+let lex_backticks s =
+  let lp = "language-" in
+  let lpl = String.length lp in
+  let s = String.trim s in
+  if starts_with ~prefix:"```" s then
+    let after_backticks = String.sub s 3 (String.length s - 3) in
+    let language =
+      if starts_with ~prefix:lp after_backticks then
+        String.sub after_backticks lpl (String.length after_backticks - lpl)
+      else after_backticks
+    in
+    if String.equal language "" then Backticks_token { language_opt = None }
+    else Backticks_token { language_opt = Some language }
+  else Not_backticks
+
 let visit_lines_with_codeblocks ?debug (lines : string list) :
     (codeblock_state * string) list =
   ignore debug;
-  let is_backticks line = String.(equal (trim line) "```") in
   let is_codeblock_directive line =
     starts_with ~prefix:"::code-block::" (String.trim line)
   in
   let rec helper state remaining_lines acc =
     match (state, remaining_lines) with
     | _, [] -> acc
-    | Outside, line :: rest when is_backticks line ->
+    | Outside, line :: rest
+      when match lex_backticks line with
+           | Backticks_token _ -> true
+           | _ -> false ->
+        let language_opt =
+          match lex_backticks line with
+          | Backticks_token { language_opt } -> language_opt
+          | _ -> None
+        in
         let newstate =
-          Start_backticks { language_opt = None; indent = get_indent line }
+          Start_backticks { language_opt; indent = get_indent line }
         in
         helper newstate rest ((newstate, line) :: acc)
     | Start_backticks _, line :: rest when is_codeblock_directive line ->
@@ -124,7 +151,9 @@ let visit_lines_with_codeblocks ?debug (lines : string list) :
         in
         helper directive rest ((directive, line) :: acc)
     | (Start_backticks _ | Directive _ | Codeblock _), line :: rest
-      when is_backticks line ->
+      when match lex_backticks line with
+           | Backticks_token { language_opt = None } -> true
+           | _ -> false ->
         helper End_backticks rest ((End_backticks, line) :: acc)
     | Start_backticks _, line :: rest ->
         let codeblock = Codeblock { dedent = 0 } in

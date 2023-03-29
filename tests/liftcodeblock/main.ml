@@ -2,7 +2,6 @@ open Tezt
 open Tezt.Base
 
 let tags = []
-
 let register ~title = Test.register ~__FILE__ ~tags ~title
 
 (* ------------------- last_word ----------------------- *)
@@ -98,8 +97,8 @@ let stringify_lines_with_state :
 let () =
   register
     ~title:
-      "GIVEN different indented python and console code blocks WHEN \
-       visit_lines_with_codeblocks"
+      "GIVEN differently fenced and indented python, java and console code \
+       blocks WHEN visit_lines_with_codeblocks"
   @@ fun () ->
   let ans =
     let open Liftcodeblock in
@@ -111,6 +110,16 @@ let () =
 
 from a import b
 c = "string"
+```
+
+```java
+public class A {
+}
+```
+
+```language-java
+public class B {
+}
 ```
 
 --------
@@ -151,6 +160,16 @@ contents.
         "Codeblock(dedent=0)";
         "Codeblock(dedent=0) from a import b";
         "Codeblock(dedent=0) c = \"string\"";
+        "End_backticks ```";
+        "Outside";
+        "Start_backticks(indent=0,java) ```java";
+        "Codeblock(dedent=0) public class A {";
+        "Codeblock(dedent=0) }";
+        "End_backticks ```";
+        "Outside";
+        "Start_backticks(indent=0,java) ```language-java";
+        "Codeblock(dedent=0) public class B {";
+        "Codeblock(dedent=0) }";
         "End_backticks ```";
         "Outside";
         "Outside --------";
