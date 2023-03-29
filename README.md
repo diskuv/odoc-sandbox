@@ -148,7 +148,7 @@ SECOND, write the following `.envrc` in the project directory (same directory as
 
 ```shell
 #!/bin/sh
-export OPAMROOT=$HOME/.config/opam
+export OPAMROOT="$HOME/.config/opam"
 #   shellcheck disable=SC2046
 eval $(conda run -n odoc-sandbox opam env --set-switch)
 ```
