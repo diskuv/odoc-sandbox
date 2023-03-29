@@ -94,7 +94,7 @@ let directive_to_string = function
 type codeblock_state =
   | Outside
   | Start_backticks of { indent : int; language_opt : string option }
-  | Directive of { indent : int; directive : directive }
+  | Directive of { indent : int; backticks_indent : int; directive : directive }
   | Codeblock of { dedent : int }
   | End_backticks
 
@@ -140,12 +140,14 @@ let visit_lines_with_codeblocks ?debug (lines : string list) :
           Start_backticks { language_opt; indent = get_indent line }
         in
         helper newstate rest ((newstate, line) :: acc)
-    | Start_backticks _, line :: rest when is_codeblock_directive line ->
+    | Start_backticks { indent = backticks_indent; _ }, line :: rest
+      when is_codeblock_directive line ->
         let language = last_word line in
         let directive =
           Directive
             {
               indent = get_indent line;
+              backticks_indent;
               directive = Directive_code_block { language };
             }
         in
@@ -158,8 +160,10 @@ let visit_lines_with_codeblocks ?debug (lines : string list) :
     | Start_backticks _, line :: rest ->
         let codeblock = Codeblock { dedent = 0 } in
         helper codeblock rest ((codeblock, line) :: acc)
-    | Directive { indent; directive = _ }, line :: rest ->
-        let codeblock = Codeblock { dedent = indent } in
+    | Directive { indent; backticks_indent; _ }, line :: rest ->
+        (* dedent(codeblock) = indent('::code-block') - indent('```') *)
+        let dedent = indent - backticks_indent in
+        let codeblock = Codeblock { dedent } in
         helper codeblock rest ((codeblock, line) :: acc)
     | End_backticks, line :: rest -> helper Outside rest ((Outside, line) :: acc)
     | previous_state, line :: rest ->
@@ -182,8 +186,9 @@ let description_of_state = function
       | None -> Printf.sprintf "Start_backticks(indent=%d)" indent
       | Some language ->
           Printf.sprintf "Start_backticks(indent=%d,%s)" indent language)
-  | Directive { indent; directive } ->
-      Printf.sprintf "Directive(indent=%d, %s)" indent
+  | Directive { indent; backticks_indent; directive } ->
+      Printf.sprintf "Directive(indent=%d, backticks_indent=%d, %s)" indent
+        backticks_indent
         (directive_to_string directive)
   | Codeblock { dedent } -> Printf.sprintf "Codeblock(dedent=%d)" dedent
   | End_backticks -> "End_backticks"
@@ -219,10 +224,8 @@ let normalize_codeblock_lines1 lines_with_state =
     match line_and_maybe_next_lst with
     | [] -> acc
     | ( (Start_backticks { indent = indent_backticks; _ }, line),
-        Some
-          ( Directive
-              { indent = _; directive = Directive_code_block { language } },
-            _ ) )
+        Some (Directive { directive = Directive_code_block { language }; _ }, _)
+      )
       :: tl ->
         (* LIFT
            from
@@ -239,8 +242,7 @@ let normalize_codeblock_lines1 lines_with_state =
           :: acc
         in
         helper new_acc Remove_directive_code_block tl
-    | ((Directive { indent = _; directive = Directive_code_block _ }, _), _)
-      :: tl
+    | ((Directive { directive = Directive_code_block _; _ }, _), _) :: tl
       when phase = Remove_directive_code_block ->
         (* SQUELCH ::code-block:: <language> if we just did a LIFT *)
         helper acc Standard tl

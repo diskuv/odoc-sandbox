@@ -124,9 +124,9 @@ public class B {
 
 --------
 
-The contents of the following code block ARE indented
+The inner code block IS indented
 because the ::code-block:: python is aligned to the left
-of the contents.
+of the text.
 
 ```
 ::code-block:: console
@@ -139,9 +139,9 @@ of the contents.
 
 --------
 
-The contents of the following code block are not indented
-because the ::code-block:: python is aligned with the
-contents.
+The inner code block is not indented because
+the ::code-block:: is aligned with its
+text.
 
 ```
   ::code-block:: python
@@ -149,6 +149,23 @@ contents.
   from a import b
   c = "string"
 ```
+
+--------
+
+The inner code block is not indented
+because the ::code-block:: python is aligned with the
+contents. However, the outer fenced block is indented, so
+the final rendering should align the code block with the
+outer fenced block.
+
+* Here it is:
+
+  ```
+    ::code-block:: python
+
+    from a import b
+    c = "string"
+  ```
 |})
   in
   Check.(
@@ -156,7 +173,8 @@ contents.
     = [
         "Outside";
         "Start_backticks(indent=0) ```";
-        "Directive(indent=0, code-block(python)) ::code-block:: python";
+        "Directive(indent=0, backticks_indent=0, code-block(python)) \
+         ::code-block:: python";
         "Codeblock(dedent=0)";
         "Codeblock(dedent=0) from a import b";
         "Codeblock(dedent=0) c = \"string\"";
@@ -174,12 +192,13 @@ contents.
         "Outside";
         "Outside --------";
         "Outside";
-        "Outside The contents of the following code block ARE indented";
+        "Outside The inner code block IS indented";
         "Outside because the ::code-block:: python is aligned to the left";
-        "Outside of the contents.";
+        "Outside of the text.";
         "Outside";
         "Start_backticks(indent=0) ```";
-        "Directive(indent=0, code-block(console)) ::code-block:: console";
+        "Directive(indent=0, backticks_indent=0, code-block(console)) \
+         ::code-block:: console";
         "Codeblock(dedent=0)";
         "Codeblock(dedent=0)   $ echo \"Hi\"";
         "Codeblock(dedent=0)   # ls -lh";
@@ -189,16 +208,35 @@ contents.
         "Outside";
         "Outside --------";
         "Outside";
-        "Outside The contents of the following code block are not indented";
-        "Outside because the ::code-block:: python is aligned with the";
-        "Outside contents.";
+        "Outside The inner code block is not indented because";
+        "Outside the ::code-block:: is aligned with its";
+        "Outside text.";
         "Outside";
         "Start_backticks(indent=0) ```";
-        "Directive(indent=2, code-block(python))   ::code-block:: python";
+        "Directive(indent=2, backticks_indent=0, code-block(python))   \
+         ::code-block:: python";
         "Codeblock(dedent=2)";
         "Codeblock(dedent=2)   from a import b";
         "Codeblock(dedent=2)   c = \"string\"";
         "End_backticks ```";
+        "Outside";
+        "Outside --------";
+        "Outside";
+        "Outside The inner code block is not indented";
+        "Outside because the ::code-block:: python is aligned with the";
+        "Outside contents. However, the outer fenced block is indented, so";
+        "Outside the final rendering should align the code block with the";
+        "Outside outer fenced block.";
+        "Outside";
+        "Outside * Here it is:";
+        "Outside";
+        "Start_backticks(indent=2)   ```";
+        "Directive(indent=4, backticks_indent=2, code-block(python))     \
+         ::code-block:: python";
+        "Codeblock(dedent=2)";
+        "Codeblock(dedent=2)     from a import b";
+        "Codeblock(dedent=2)     c = \"string\"";
+        "End_backticks   ```";
       ])
       (list string))
     ~error_msg:{|THEN = %R, but got %L|};
@@ -220,6 +258,16 @@ let () =
 from a import b
 c = "string"
 ```
+
+* Indented fenced block with an
+  indented code-block:
+
+  ```
+    ::code-block:: python
+
+    from a import b
+    c = "string"
+  ```
 
 ```
 ::code-block:: console
@@ -247,6 +295,15 @@ c = "string"
         "Codeblock(dedent=0) from a import b";
         "Codeblock(dedent=0) c = \"string\"";
         "End_backticks ```";
+        "Outside";
+        "Outside * Indented fenced block with an";
+        "Outside   indented code-block:";
+        "Outside";
+        "Start_backticks(indent=2,python)   ```";
+        "Codeblock(dedent=0)";
+        "Codeblock(dedent=0)   from a import b";
+        "Codeblock(dedent=0)   c = \"string\"";
+        "End_backticks   ```";
         "Outside";
         "Start_backticks(indent=0,console) ```";
         "Codeblock(dedent=0)";
@@ -399,6 +456,49 @@ let () = print_endline "This is OCaml"
 from a import b
 c = "string"
 ```
+|}
+    )
+      string)
+    ~error_msg:{|THEN = %R, but got %L|};
+  unit
+
+let () =
+  register
+    ~title:
+      "GIVEN indented outer fenced block and indented inner code block WHEN \
+       lift"
+  @@ fun () ->
+  Check.(
+    (Liftcodeblock.lift
+       {|
+  ```
+       ::code-block:: tcshcon
+
+       utop #> 3.5 +. 6. ;;
+       > - : float = 9.5
+       utop #> 30_000_000 / 300_000 ;;
+       > - : int = 100
+       utop #> let square x = x * x ;;
+       > val square : int -> int = <fun>
+       utop #> square 2 ;;
+       > - : int = 4
+       utop #> square (square 2) ;;
+       > - : int = 16
+  ```
+|}
+    = {|
+  ```tcshcon
+  utop #> 3.5 +. 6. ;;
+  > - : float = 9.5
+  utop #> 30_000_000 / 300_000 ;;
+  > - : int = 100
+  utop #> let square x = x * x ;;
+  > val square : int -> int = <fun>
+  utop #> square 2 ;;
+  > - : int = 4
+  utop #> square (square 2) ;;
+  > - : int = 16
+  ```
 |}
     )
       string)
