@@ -43,10 +43,10 @@ jobs:
           conda info
           conda list
 
-      - name: OCaml 4.12.x
+      - name: OCaml 4.14.x
         uses: ocaml/setup-ocaml@v2
         with:
-          ocaml-compiler: 4.12.x
+          ocaml-compiler: 4.14.x
           dune-cache: false # true does not publish pages consistently
 
       - name: Build docs and tests
