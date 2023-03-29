@@ -35,14 +35,6 @@ $(SWITCH_ARTIFACTS):
 		opam switch create . --empty --no-install --repos diskuv=git+https://github.com/diskuv/diskuv-opam-repository.git#main,default=https://opam.ocaml.org; \
 	fi
 
-PIN_ARTIFACTS = _opam/.pin.depends
-pins: $(PIN_ARTIFACTS)
-$(PIN_ARTIFACTS): $(SWITCH_ARTIFACTS) $(MSYS2_CLANG64_PREREQS) Makefile
-	export OPAMYES=1 OPAMSWITCH='$(OPAMSWITCH)' && \
-	opam pin tezt git+https://gitlab.com/nomadic-labs/tezt.git#3.0.0 --no-action && \
-	touch $@
-
-
 OPAMPKGS_ARTIFACTS = _opam/bin/dune$(EXEEXT) _opam/bin/odoc$(EXEEXT)
 opam-packages: $(OPAMPKGS_ARTIFACTS)
 .PHONY: opam-packages
