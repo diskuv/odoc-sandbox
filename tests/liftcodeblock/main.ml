@@ -505,6 +505,60 @@ let () =
     ~error_msg:{|THEN = %R, but got %L|};
   unit
 
+let () =
+  register ~title:"GIVEN PrismJS and MyST formatted code block WHEN lift" @@ fun () ->
+  Check.(
+    (Liftcodeblock.lift
+       {|
+```
+::code-block:: shell{promptUser: alice}{promptHost: dev.localhost}
+
+echo This is a PrismJS code block.
+
+case $host in #(
+  *-pc-windows) :
+    CC=cl
+
+#...
+
+AS_CASE([$host],
+  [*-*-mingw32*|*-pc-windows],
+    [CSC=csc
+```
+
+```
+::code-block:: {figure} ../images/cool.jpg
+:name: my-fig-ref
+
+My MyST figure title.
+```
+|}
+    = {|
+```shell{promptUser: alice}{promptHost: dev.localhost}
+echo This is a PrismJS code block.
+
+case $host in #(
+  *-pc-windows) :
+    CC=cl
+
+#...
+
+AS_CASE([$host],
+  [*-*-mingw32*|*-pc-windows],
+    [CSC=csc
+```
+
+```{figure} ../images/cool.jpg
+:name: my-fig-ref
+
+My MyST figure title.
+```
+|}
+    )
+      string)
+    ~error_msg:{|THEN = %R, but got %L|};
+  unit
+
 (* --------------- run --------------- *)
 
 let () = Test.run ()

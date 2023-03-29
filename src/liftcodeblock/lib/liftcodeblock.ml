@@ -64,11 +64,12 @@ let contents_to_lines s : string list =
 (** {1 Operations} *)
 
 type directive =
-  | Directive_code_block of { language : string }
+  | Directive_code_block of { language_opt : string option }
   | Other of string
 
 let directive_to_string = function
-  | Directive_code_block { language } ->
+  | Directive_code_block { language_opt = None } -> "code-block"
+  | Directive_code_block { language_opt = Some language } ->
       Printf.sprintf "code-block(%s)" language
   | Other s -> Printf.sprintf "other(%s)" s
 
@@ -98,11 +99,11 @@ type codeblock_state =
   | Codeblock of { dedent : int }
   | End_backticks
 
-type backticks =
-  | Not_backticks
+type backticks_token =
+  | Not_backticks_token
   | Backticks_token of { language_opt : string option }
 
-(** From ["```language-ocaml"] to [Backticks { language_opt = "ocaml" }]  *)
+(** From ["```language-ocaml"] to [Backticks_token { language_opt = "ocaml" }]  *)
 let lex_backticks s =
   let lp = "language-" in
   let lpl = String.length lp in
@@ -116,14 +117,27 @@ let lex_backticks s =
     in
     if String.equal language "" then Backticks_token { language_opt = None }
     else Backticks_token { language_opt = Some language }
-  else Not_backticks
+  else Not_backticks_token
+
+type codeblock_token =
+  | Not_codeblock_token
+  | Codeblock_token of { language_opt : string option }
+
+(** From ["::code-block:: ocaml"] to [::code-block:: { language_opt = "ocaml" }]  *)
+let lex_codeblock_directive s =
+  let prefix = "::code-block::" in
+  let len_prefix = String.length prefix in
+  let s = String.trim s in
+  if starts_with ~prefix s then
+    let language = String.sub s len_prefix (String.length s - len_prefix) in
+    let language = String.trim language in
+    if String.equal language "" then Codeblock_token { language_opt = None }
+    else Codeblock_token { language_opt = Some language }
+  else Not_codeblock_token
 
 let visit_lines_with_codeblocks ?debug (lines : string list) :
     (codeblock_state * string) list =
   ignore debug;
-  let is_codeblock_directive line =
-    starts_with ~prefix:"::code-block::" (String.trim line)
-  in
   let rec helper state remaining_lines acc =
     match (state, remaining_lines) with
     | _, [] -> acc
@@ -141,14 +155,20 @@ let visit_lines_with_codeblocks ?debug (lines : string list) :
         in
         helper newstate rest ((newstate, line) :: acc)
     | Start_backticks { indent = backticks_indent; _ }, line :: rest
-      when is_codeblock_directive line ->
-        let language = last_word line in
+      when match lex_codeblock_directive line with
+           | Codeblock_token _ -> true
+           | _ -> false ->
+        let language_opt =
+          match lex_codeblock_directive line with
+          | Codeblock_token { language_opt } -> language_opt
+          | _ -> None
+        in
         let directive =
           Directive
             {
               indent = get_indent line;
               backticks_indent;
-              directive = Directive_code_block { language };
+              directive = Directive_code_block { language_opt };
             }
         in
         helper directive rest ((directive, line) :: acc)
@@ -224,7 +244,8 @@ let normalize_codeblock_lines1 lines_with_state =
     match line_and_maybe_next_lst with
     | [] -> acc
     | ( (Start_backticks { indent = indent_backticks; _ }, line),
-        Some (Directive { directive = Directive_code_block { language }; _ }, _)
+        Some
+          (Directive { directive = Directive_code_block { language_opt }; _ }, _)
       )
       :: tl ->
         (* LIFT
@@ -236,9 +257,7 @@ let normalize_codeblock_lines1 lines_with_state =
            using the indentation of the original "```".
         *)
         let new_acc =
-          ( Start_backticks
-              { indent = indent_backticks; language_opt = Some language },
-            line )
+          (Start_backticks { indent = indent_backticks; language_opt }, line)
           :: acc
         in
         helper new_acc Remove_directive_code_block tl
