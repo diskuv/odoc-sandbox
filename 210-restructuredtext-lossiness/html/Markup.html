@@ -51,10 +51,7 @@
 <li><a href="#lists">Lists</a></li>
 <li><a href="#unicode">Unicode</a></li>
 <li><a href="#raw-html">Raw HTML</a></li>
-<li><a href="#math">Math</a>
-<ul>
-<li><a href="#\pi-i-\xi-x">\pi i \xi x</a></li>
-</ul></li>
+<li><a href="#math">Math</a></li>
 <li><a href="#modules">Modules</a></li>
 <li><a href="#tags">Tags</a></li>
 </ul>
@@ -131,8 +128,7 @@ links and references can't be nested inside each other.</p>
 href="#preformatted-text">#preformatted-text</a>Preformatted
 text</strong></p>
 <p>This is a code block:</p>
-<p>:</p>
-<pre><code>let foo = ()
+<pre class="language-ocaml"><code>let foo = ()
 (** There are some nested comments in here, but an unpaired comment
     terminator would terminate the whole doc surrounding comment. It&#39;s
     best to keep code blocks no wider than 72 characters. *)
@@ -185,18 +181,15 @@ block element, and won't be wrapped in paragraph tags by the HTML
 generator.</p>
 </blockquote>
 <p><strong><a href="#math">#math</a>Math</strong></p>
-<p>Math elements can be inline: <code>m \int_{-\infty</code>^\infty</p>
-<p>}</p>
-<p>, or blocks:</p>
-<p><code>math % \f is defined as #1f(#2) using the macro \newcommand{\f</code><code>2</code><code>#1f(#2)</code>
-\f\relax<code>x</code> = \int_</p>
-<p>\infty</p>
-<p>}</p>
-<p>^\infty \f\hat\xi\,e^</p>
-<p><strong><a href="#\pi-i-\xi-x">#\pi-i-\xi-x</a>\pi i \xi
-x</strong></p>
-<p>\,d\xi</p>
-<p>}</p>
+<p>Math elements can be inline: <code>\int_{-\infty}^\infty</code>, or
+blocks:</p>
+<div class="container">
+<pre class="odoc-katex-math"><code>% \f is defined as #1f(#2) using the macro
+\newcommand{\f}[2]{#1f(#2)}
+\f\relax{x} = \int_{-\infty}^\infty
+\f\hat\xi\,e^{2 \pi i \xi x}
+\,d\xi</code></pre>
+</div>
 <p><strong><a href="#modules">#modules</a>Modules</strong></p>
 <ul>
 <li><code>`X</code> &lt;Markup-X.html&gt;`__</li>
@@ -228,7 +221,7 @@ examples:</p>
 <li><p>version -1</p></li>
 </ul>
 <div class="container odoc-spec">
-<div id="val-foo" class="container anchored">
+<div id="val-foo" class="container spec value anchored">
 <p><a href="#val-foo">#val-foo</a>
 <code>val</code><code>foo : unit</code></p>
 </div>
@@ -239,7 +232,7 @@ t <sup>o</sup><sub>o</sub>.</p>
 </div>
 <p>Some modules to support references.</p>
 <div class="container odoc-spec">
-<div id="module-X" class="container anchored">
+<div id="module-X" class="container spec module anchored">
 <p><a href="#module-X">#module-X</a>
 <code></code><code>module</code><code></code><code>`X</code>
 &lt;Markup-X.html&gt;<span
@@ -247,7 +240,7 @@ class="title-ref">__</span><code>`\</code><code>\</code>:<code>\</code>sig<code>
 </div>
 </div>
 <div class="container odoc-spec">
-<div id="module-Y" class="container anchored">
+<div id="module-Y" class="container spec module anchored">
 <p><a href="#module-Y">#module-Y</a>
 <code></code><code>module</code><code></code><code>`Y</code>
 &lt;Markup-Y.html&gt;<span
