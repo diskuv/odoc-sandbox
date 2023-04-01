@@ -1,4 +1,0 @@
-(executable
- (name lift_code_block)
- (public_name od-lift-code-block)
- (libraries liftcodeblock))

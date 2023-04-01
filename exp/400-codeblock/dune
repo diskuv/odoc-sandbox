@@ -55,7 +55,7 @@
   (target Feature_codeblock.md.gen3)
   (action
    (with-stdout-to %{target}
-    (run od-lift-code-block %{dep:Feature_codeblock.md.gen2}))))
+    (run dkbg-liftcodeblock %{dep:Feature_codeblock.md.gen2}))))
  ; to HTML with MyST
  ; - also fixup <a href="#styling" class="anchor"></a> to be <a class="anchor" id="styling"></a>
  (rule

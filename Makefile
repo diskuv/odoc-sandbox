@@ -35,7 +35,7 @@ $(SWITCH_ARTIFACTS):
 		opam switch create . --empty --no-install --repos diskuv=git+https://github.com/diskuv/diskuv-opam-repository.git#main,default=https://opam.ocaml.org; \
 	fi
 
-OPAMPKGS_ARTIFACTS = _opam/bin/dune$(EXEEXT) _opam/bin/odoc$(EXEEXT)
+OPAMPKGS_ARTIFACTS = _opam/bin/dune$(EXEEXT) _opam/bin/odoc$(EXEEXT) _opam/lib/DkBookGen_Std/META
 opam-packages: $(OPAMPKGS_ARTIFACTS)
 .PHONY: opam-packages
 $(OPAMPKGS_ARTIFACTS): $(SWITCH_ARTIFACTS) $(MSYS2_CLANG64_PREREQS)

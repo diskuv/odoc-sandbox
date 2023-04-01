@@ -10,7 +10,7 @@ depends: [
   "dune" {>= "3.6.2"}
   "ocaml" {>= "4.14.0"}
   "diskuvbox" {>= "0.1.0"}
-  "tezt" {>= "2.0.0" & with-test}
+  "DkBookGen_Std" {>= "0.1.0"}
   # Significant HTML changes from odoc.2.1 to odoc.2.2. Lock the version.
   "odoc" {= "2.2.0" & with-doc}
 ]
@@ -35,5 +35,17 @@ pin-depends: [
   [
     "tezt.3.0.0"
     "git+https://gitlab.com/nomadic-labs/tezt.git#3.0.0"
+  ]
+  [
+    "DkBookGen_Std.0.1.0"
+    "git+https://gitlab.com/diskuv-ocaml/build-tools/DkBookGen.git"
+  ]
+  [
+    "dkml-dune-dsl.0.1.0"
+    "git+https://github.com/diskuv/dkml-dune-dsl.git"
+  ]
+  [
+    "dkml-dune-dsl-show.0.1.0"
+    "git+https://github.com/diskuv/dkml-dune-dsl.git"
   ]
 ]
